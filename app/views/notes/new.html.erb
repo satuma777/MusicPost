@@ -1,5 +1,9 @@
-<h1>New Note</h1>
+<%= form_tag notes_path do %>
+    タイトル
+    <input type="text">
 
-<%= render 'form' %>
+    音楽の説明
+    <textarea></textarea>
 
-<%= link_to 'Back', notes_path %>
+    <input type="submit" value="投稿する">
+<% end %>
