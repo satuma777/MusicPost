@@ -19,3 +19,12 @@
     <li><a href="">音楽再生画面</a></li>
 </ol>
 
+<%= form_tag notes_path do %>
+    タイトル
+    <input type="text" name="note[title]">
+
+    音楽の説明
+    <textarea name="note[content]"></textarea>
+
+    <input type="submit" value="投稿する" remote: true onSubmit="return check(params.note.content)">
+<% end %>

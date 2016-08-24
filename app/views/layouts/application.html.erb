@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Music</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>MusicPost</title>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %> 
+    <!-- ↑app/assets/stylesheets内の全CSSファイルを読み込んでいる-->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <!-- ↑app/assets/javascripts内の全javascriptファイルを読み込んでいる-->
+    <%= csrf_meta_tags %>
+    <!-- ↑セキュリティのためのタグ-->
 </head>
 <body>
-
-<%= yield %>
-
+    <header class="navbar">
+    <div class="container">
+        <div id="logo">MusicPost</div>
+        <ul class="header-right">
+            <li><%= link_to "ホーム", root_path %></li>
+            <li><%= link_to "マッチング" %></li>
+            <li><%= link_to "メロディー閲覧" %></li>
+            <li><%= link_to "音楽レッスン" %></li>
+            <li><%= link_to "有料会員登録" %></li>
+            <li><%= link_to "ログイン" %></li> 
+            <!-- ↑ログインしている特はログアウトに変わる-->
+            <li><%= link_to "マイページ" %></li> 
+            <li><%= link_to "音楽投稿" %></li>
+            <li><%= link_to "ランキング" %></li>
+            <li><%= link_to "オススメ音楽" %></li>
+            <li><%= link_to "オススメユーザー" %></li>
+            <li><%= link_to "お知らせ" %></li>
+        </ul>
+        </div>
+    </header>
+            <%= yield %>
 </body>
 </html>

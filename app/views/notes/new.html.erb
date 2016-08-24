@@ -1,9 +1,9 @@
 <%= form_tag notes_path do %>
     タイトル
-    <input type="text">
+    <input type="text" name="note[title]">
 
     音楽の説明
-    <textarea></textarea>
+    <textarea name="note[content]"></textarea>
 
-    <input type="submit" value="投稿する">
+    <input type="submit" value="投稿する" onSubmit="return check(params.note.content)">
 <% end %>
