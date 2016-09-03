@@ -1,16 +1,20 @@
 Rails.application.routes.draw do
-    get 'home_lesson/top'
-
-    get 'home_matching/top'
-
-    root 'home#top'
-    get '/alert' => 'home#alert'
-
-    resources :users
+    resources :sounds do
+        collection do
+            get :show_melody
+            get :index_recommend, as: 'recommend'
+        end
+    end
+    resources :users do
+        collection do
+            get :index_recommend, as: 'recommend'
+        end
+    end
     resources :notes
 
-    get '/show/melody' => 'notes#show_melody'
-    get '/notes/index/recommend' => 'notes#index_recommend' , as: 'notes_recommend'
-    get '/users/index/recommend' => 'users#index_recommend' , as: 'users_recommend'
+    get 'home_lesson/top'
+    get 'home_matching/top'
+    root 'home#top'
+    get '/alert' => 'home#alert'
 
 end

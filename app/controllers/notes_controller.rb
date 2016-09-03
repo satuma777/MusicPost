@@ -5,13 +5,7 @@ class NotesController < ApplicationController
         @notes = Note.all
     end
 
-    def index_recommend
-    end
-
     def show
-    end
-
-    def show_melody
     end
 
     def new

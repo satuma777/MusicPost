@@ -1,0 +1,15 @@
+<h1>音楽を投稿する</h1>
+
+<%= form_tag do%>
+    タイトル
+    <input type="text">
+    音楽の説明
+    <textarea></textarea>
+    投稿する音楽の選択
+    <input class="form-content" id="post-sound" name="sound" type="file">
+    <input type="submit" value='投稿する'>
+<% end %>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', sounds_path %>

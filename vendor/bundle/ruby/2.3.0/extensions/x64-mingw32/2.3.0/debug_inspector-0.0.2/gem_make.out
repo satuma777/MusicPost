@@ -1,0 +1,16 @@
+current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/debug_inspector-0.0.2/ext/debug_inspector
+C:/Ruby23-x64/bin/ruby.exe -r ./siteconf20160903-13404-19yrpia.rb extconf.rb
+creating Makefile
+
+current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/debug_inspector-0.0.2/ext/debug_inspector
+make "DESTDIR=" clean
+
+current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/debug_inspector-0.0.2/ext/debug_inspector
+make "DESTDIR="
+generating debug_inspector-x64-mingw32.def
+compiling debug_inspector.c
+linking shared-object debug_inspector.so
+
+current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/debug_inspector-0.0.2/ext/debug_inspector
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 debug_inspector.so ./.gem.20160903-13404-l2owx3
