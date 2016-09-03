@@ -1,29 +1,23 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Notes</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Content</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @notes.each do |note| %>
-      <tr>
-        <td><%= note.title %></td>
-        <td><%= note.content %></td>
-        <td><%= link_to 'Show', note %></td>
-        <td><%= link_to 'Edit', edit_note_path(note) %></td>
-        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h1>音楽ランキング</h1>
+<h2>
+    機能
+</h2>
+<ol>
+    <li>総合ランキング表示</li>
+    <li>運営のオススメ音楽表示</li>
+    <li>新着の音楽表示</li>
+    <li>トレンドタグ</li>
+    <li>トレンドキーワード</li>
+    <li>カテゴリ別ランキングへの表示切替</li>
+</ol>
+<h2>
+    リンク
+</h2>
+<ol>
+    <li><a href="">トレンドタグによる検索</a></li>
+    <li><a href="">トレンドキーワードによる検索</a></li>
+    <li><a href="">音楽再生画面</a></li>
+</ol>
 
 <br>
 
-<%= link_to 'New Note', new_note_path %>
