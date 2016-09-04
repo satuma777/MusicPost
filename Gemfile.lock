@@ -161,6 +161,7 @@ DEPENDENCIES
   coffee-script-source (= 1.8.0)
   jbuilder (~> 2.0)
   jquery-rails
+  mimemagic
   rails (= 4.2.5)
   rmagick
   sass-rails (~> 5.0)

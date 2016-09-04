@@ -45,6 +45,22 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'carrierwave'
-gem 'rmagick', require: 'RMagick'
 gem 'coffee-script-source', '1.8.0'
+#↑railsのセットアップに必要なgem
+
+gem 'carrierwave'
+#↑アップロードを機能を付与するgem
+
+#gem 'ruby-filemagic'
+#↑carrierwave-magicで必要なgem
+
+#gem 'carrierwave-magic'
+#↑carrierwaveでファイル内容と拡張子の一致を確認するためのgem
+
+gem 'rmagick', require: 'RMagick'
+#↑carrierwaveで必要なgem
+
+gem 'mimemagic'
+#↑ファイル内容と拡張子の一致を確認するためのgem
+
+
