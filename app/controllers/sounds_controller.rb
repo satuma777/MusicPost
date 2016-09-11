@@ -1,5 +1,7 @@
 class SoundsController < ApplicationController
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
+    require 'kconv'
+    require 'mimemagic'
 
     def index
         @sounds = Sound.all
@@ -13,7 +15,7 @@ class SoundsController < ApplicationController
 
     def show_melody
     end
-    
+
     def new
         @sound = Sound.new
     end
@@ -25,15 +27,30 @@ class SoundsController < ApplicationController
     # POST /sounds
     # POST /sounds.json
     def create
-        @sound = Sound.new(sound_params)
-
-        respond_to do |format|
-            if @sound.save
-                format.html { redirect_to @sound, notice: 'Sound was successfully created.' }
-                format.json { render :show, status: :created, location: @sound }
+       @sound = Sound.new(sound_params)
+        file = params[:sound][:upfile]
+        perms = ['.mp3', '.ogg', '.wav']
+        if !file.nil?
+            file_name = file.original_filename
+            #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す
+            #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
+            if !perms.include?(File.extname(file_name).downcase)
+                result = 'アップロードできるのは"mp3"、"ogg"、"wav"のみです。'
+                render :new
+            elseif file.size > 15.megabyte
+                result = 'ファイルサイズは15MBまでです。'
+                render :new
             else
-                format.html { render :new }
-                format.json { render json: @sound.errors, status: :unprocessable_entity }
+                file_name = file_name.kconv(Kconv::SJIS, Kconv::UTF8)
+                File.open("public/files/#{file_name}", 'wb') { |f| f.write(file.read) }
+                @sound.upfile = file_name
+            end
+            if @sound.save
+                redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
+                #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
+                #↑sound_path(@sound.id)でshowアクションに飛ぶ
+            else
+                render :new
             end
         end
     end

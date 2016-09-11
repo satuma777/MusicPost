@@ -1,15 +1,47 @@
 <h1>音楽を投稿する</h1>
 
-<%= form_tag do%>
+<%= form_for(@sound) do |f| %>
+<!--↑action:で現在のビュー（ここではupload.html.erb）に対応するコントローラーのアクションであるupload_processを呼び出している-->
+<!--↑multipartオプションを有効にしておかないと、正しくデータを受信できない。-->
     タイトル
-    <input type="text">
+    <%= f.text_field :title, { class: "form-control title-field" } %>
     音楽の説明
-    <textarea></textarea>
-    投稿する音楽の選択
-    <input class="form-content" id="post-sound" name="sound" type="file">
-    <input type="submit" value='投稿する'>
+    <%= f.text_area :content, { class: "form-control content-field" } %>
+    <br>
+    <lavel>ファイルを指定：
+        <%= f.file_field :upfile, size: 50 %>
+        <!--file_field(オブジェクト名, プロパティ名 [, オプション])  :size  フォームの幅-->
+    </lavel>
+    <%= f.submit "アップロード" %>
 <% end %>
 
-<%= render 'form' %>
 
-<%= link_to 'Back', sounds_path %>
+<%= form_for(@sound, html: {multipart: true}) do |f| %>
+<% if @sound.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= pluralize(@sound.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+      <% @sound.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+<% end %>
+<div class="field">
+    <%= f.label :upfile %><br>
+    <%= f.file_field :upfile %>
+</div>
+<div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+</div>
+<div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_area :content %>
+</div>
+<div class="actions">
+    <%= f.submit %>
+</div>
+<% end %>
+

@@ -57,10 +57,11 @@ gem 'carrierwave'
 #gem 'carrierwave-magic'
 #↑carrierwaveでファイル内容と拡張子の一致を確認するためのgem
 
-gem 'rmagick', require: 'RMagick'
+#gem 'rmagick', require: 'RMagick'
 #↑carrierwaveで必要なgem
 
 gem 'mimemagic'
 #↑ファイル内容と拡張子の一致を確認するためのgem
+
 
 

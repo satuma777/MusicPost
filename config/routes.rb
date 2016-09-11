@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'sound_upload/upload'
+
     resources :sounds do
         collection do
             get :show_melody
