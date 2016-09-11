@@ -34,7 +34,7 @@ class SoundsController < ApplicationController
             file_name = file.original_filename
             #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
-            if !perms.include?(File.extname(file_name).downcase)
+            if !perms.include?(File.extname(file_name).downcase) #|| MimeMagic.by_magic(file_name) != audio/mp3 && MimeMagic.by_magic(file_name) != audio/mpeg && MimeMagic.by_magic(file_name) != audio/wav && MimeMagic.by_magic(file_name) != audio/x-wav && MimeMagic.by_magic(file_name) != audio/ogg && MimeMagic.by_magic(file_name) != video/ogg
                 result = 'アップロードできるのは"mp3"、"ogg"、"wav"のみです。'
                 render :new
             elseif file.size > 15.megabyte
