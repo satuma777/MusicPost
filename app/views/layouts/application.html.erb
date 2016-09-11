@@ -18,16 +18,16 @@
         <ul class="header-right">
             <li><%= link_to "ホーム", root_path %></li>
             <li><%= link_to "マッチング", home_matching_top_path %></li>
-            <li><%= link_to "メロディー閲覧", show_melody_path %></li>
+            <li><%= link_to "メロディー閲覧", show_melody_sounds_path %></li>
             <li><%= link_to "音楽レッスン", home_lesson_top_path %></li>
             <li><%= link_to "有料会員登録" ,new_user_path %></li>
             <li><%= link_to "ログイン" %></li> 
             <!-- ↑ログインしている特はログアウトに変わる-->
             <li><%= link_to "マイページ" ,users_path %></li> 
-            <li><%= link_to "音楽投稿" ,new_note_path %></li>
-            <li><%= link_to "ランキング" ,notes_path %></li>
-            <li><%= link_to "オススメ音楽" ,notes_recommend_path %></li>
-            <li><%= link_to "オススメユーザー" ,users_recommend_path %></li>
+            <li><%= link_to "音楽投稿" ,new_sound_path %></li>
+            <li><%= link_to "ランキング" ,sounds_path %></li>
+            <li><%= link_to "オススメ音楽" ,recommend_sounds_path %></li>
+            <li><%= link_to "オススメユーザー" ,recommend_users_path %></li>
             <li><%= link_to "お知らせ" ,alert_path %></li>
         </ul>
         </div>

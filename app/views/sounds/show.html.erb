@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @sound.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @sound.content %>
+</p>
+
+<%= link_to 'Edit', edit_sound_path(@sound) %> |
+<%= link_to 'Back', sounds_path %>
