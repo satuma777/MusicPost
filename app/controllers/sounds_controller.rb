@@ -27,31 +27,35 @@ class SoundsController < ApplicationController
     # POST /sounds
     # POST /sounds.json
     def create
-       @sound = Sound.new(sound_params)
+        @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
         perms = ['.mp3', '.ogg', '.wav']
         if !file.nil?
             file_name = file.original_filename
             #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す
+            #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返します。
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
-            if !perms.include?(File.extname(file_name).downcase)
-                result = 'アップロードできるのは"mp3"、"ogg"、"wav"のみです。'
-                render :new
-            elseif file.size > 15.megabyte
-                result = 'ファイルサイズは15MBまでです。'
+            if !perms.include?(File.extname(file_name).downcase) then
+               @sound.upfile = "ext_error"
+            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
+                @sound.upfile = "file_error"
+            elsif file.size > 15.megabyte then
+                @sound.upfile = "size_error"
+            end
+            unless @sound.valid?
                 render :new
             else
-                file_name = file_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                File.open("public/files/#{file_name}", 'wb') { |f| f.write(file.read) }
-                @sound.upfile = file_name
-            end
-            if @sound.save
+               @sound.set_sound(file)
+                if @sound.save then
                 redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
                 #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
                 #↑sound_path(@sound.id)でshowアクションに飛ぶ
-            else
-                render :new
+                else
+                    render :new
+                end
             end
+        else
+            render :new
         end
     end
 
