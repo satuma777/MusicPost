@@ -3,6 +3,18 @@
 <%= form_for(@sound) do |f| %>
 <!--↑action:で現在のビュー（ここではupload.html.erb）に対応するコントローラーのアクションであるupload_processを呼び出している-->
 <!--↑multipartオプションを有効にしておかないと、正しくデータを受信できない。-->
+    <% if @sound.errors.any? %>
+        <div class="alert alert-danger">
+            <p><%= @sound.errors.count %>件のエラーがあります。</p>
+
+            <ul>
+                <% @sound.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
     タイトル
     <%= f.text_field :title, { class: "form-control title-field" } %>
     音楽の説明
