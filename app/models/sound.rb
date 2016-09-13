@@ -19,7 +19,7 @@ class Sound < ActiveRecord::Base
     def set_sound(file)
             file_name = file.original_filename
             file_name = file_name.kconv(Kconv::SJIS, Kconv::UTF8)
-            File.open("public/files/#{file_name}", 'wb') { |f| f.write(file.read) }
+            File.open("private/uploaded/#{file_name}", 'wb') { |f| f.write(file.read) }
             self.upfile = file_name
     end
 end

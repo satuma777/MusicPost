@@ -1,0 +1,20 @@
+<%= form_for [:direct, @post], html: { id: "direct" } do |form| %>
+  <p>
+    <%= @post.errors.full_messages.to_sentence %>
+  </p>
+  <p>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </p>
+  <p>
+    <%= form.label :document %>
+    <%= form.attachment_field :document, direct: true %>
+  </p>
+  <p>
+    <%= form.label :image %>
+    <%= form.attachment_field :image, direct: true %>
+  </p>
+  <p>
+    <%= form.submit "Create" %>
+  </p>
+<% end %>
