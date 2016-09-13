@@ -22,38 +22,7 @@
     <br>
     <lavel>ファイルを指定：
         <%= f.file_field :upfile, size: 50 %>
-        <!--file_field(オブジェクト名, プロパティ名 [, オプション])  :size  フォームの幅-->
+        <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
     </lavel>
     <%= f.submit "アップロード" %>
 <% end %>
-
-
-<%= form_for(@sound, html: {multipart: true}) do |f| %>
-<% if @sound.errors.any? %>
-    <div id="error_explanation" class="alert alert-danger">
-      <h2><%= pluralize(@sound.errors.count, "error") %> prohibited this post from being saved:</h2>
-
-      <ul>
-      <% @sound.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-<% end %>
-<div class="field">
-    <%= f.label :upfile %><br>
-    <%= f.file_field :upfile %>
-</div>
-<div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-</div>
-<div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content %>
-</div>
-<div class="actions">
-    <%= f.submit %>
-</div>
-<% end %>
-

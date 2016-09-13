@@ -27,7 +27,7 @@ class SoundsController < ApplicationController
     # POST /sounds
     # POST /sounds.json
     def create
-       @sound = Sound.new(sound_params)
+        @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
         perms = ['.mp3', '.ogg', '.wav']
         if !file.nil?
@@ -36,31 +36,26 @@ class SoundsController < ApplicationController
             #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返します。
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
             if !perms.include?(File.extname(file_name).downcase) then
-                result = 'アップロードできるのは"mp3"、"ogg"、"wav"のみです。'
-                flash.now[:alert] = 'アップロードできるのは"mp3"、"ogg"、"wav"のみです。'
-                render :text => result
+               @sound.upfile = "ext_error"
             elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
-                result = '不正なファイルです。'
-                flash.now[:alert] = '不正なファイルです。'
-                render  :text => result
+                @sound.upfile = "file_error"
             elsif file.size > 15.megabyte then
-                result = 'ファイルサイズは15MBまでです。'
-                flash.now[:alert] = 'ファイルサイズは15MBまでです。'
-                render  :text => result
+                @sound.upfile = "size_error"
+            end
+            unless @sound.valid?
+                render :new
             else
-                file_name = file_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                File.open("public/files/#{file_name}", 'wb') { |f| f.write(file.read) }
-                @sound.upfile = file_name
+               @sound.set_sound(file)
                 if @sound.save then
                 redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
                 #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
                 #↑sound_path(@sound.id)でshowアクションに飛ぶ
                 else
-                    result = '投稿できませんでした。もう一度お試しください。'
-                    render :text => result
-                    #↑renderメソッドを用いると、指定したビューファイルをブラウザに表示します。 redirect_toとの違いはアクションを経由しないことです。 上では、newアクションを経由することなく、new.html.erbを表示しています。
+                    render :new
                 end
             end
+        else
+            render :new
         end
     end
 
