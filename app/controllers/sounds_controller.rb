@@ -30,17 +30,32 @@ class SoundsController < ApplicationController
         @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
         perms = ['.mp3', '.ogg', '.wav']
-        unless @sound.valid?
-            render :new
-        else
-           @sound.set_sound(file)
-            if @sound.save then
-            redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
-            #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
-            #↑sound_path(@sound.id)でshowアクションに飛ぶ
-            else
-                render :new
+        if !file.nil?
+            file_name = file.original_filename
+            #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す
+            #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返します。
+            #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
+            if !perms.include?(File.extname(file_name).downcase) then
+               @sound.upfile = "ext_error"
+            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
+                @sound.upfile = "file_error"
+            elsif file.size > 15.megabyte then
+                @sound.upfile = "size_error"
             end
+            unless @sound.valid?
+                render :new
+            else
+               @sound.set_sound(file)
+                if @sound.save then
+                redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
+                #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
+                #↑sound_path(@sound.id)でshowアクションに飛ぶ
+                else
+                    render :new
+                end
+            end
+        else
+            render :new
         end
     end
 
