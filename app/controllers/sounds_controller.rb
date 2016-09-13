@@ -30,10 +30,10 @@ class SoundsController < ApplicationController
         @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
         perms = ['.mp3', '.ogg', '.wav']
-        unless @sound.valid?     
+        unless @sound.valid?
             render :new
         else
-           @user.set_sound(file)
+           @sound.set_sound(file)
             if @sound.save then
             redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
             #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
