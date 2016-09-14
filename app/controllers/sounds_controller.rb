@@ -31,11 +31,11 @@ class SoundsController < ApplicationController
         file = params[:sound][:upfile]
         perms = ['.mp3', '.ogg', '.wav']
         if !file.nil?
-            file_name = file.original_filename
+            file_orgname = file.original_filename
             #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す
             #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返します。
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる
-            if !perms.include?(File.extname(file_name).downcase) then
+            if !perms.include?(File.extname(file_orgname).downcase) then
                @sound.upfile = "ext_error"
             elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
                 @sound.upfile = "file_error"
@@ -47,7 +47,7 @@ class SoundsController < ApplicationController
             else
                @sound.set_sound(file)
                 if @sound.save then
-                redirect_to @sound, notice: "#{file_name.toutf8}をアップロードしました。"
+                redirect_to @sound, notice: "#{file_orgname.toutf8}をアップロードしました。"
                 #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
                 #↑sound_path(@sound.id)でshowアクションに飛ぶ
                 else
@@ -91,6 +91,6 @@ class SoundsController < ApplicationController
 
         # Never trust parameters from the scary internet, only allow the white list through.
         def sound_params
-            params.require(:sound).permit(:title, :content)
+            params.require(:sound).permit(:title, :content, :upfile, :image, :path ,:ext_name)
         end
 end

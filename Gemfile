@@ -60,11 +60,17 @@ gem 'carrierwave'
 gem 'rmagick', require: 'RMagick'
 #↑carrierwaveで必要なgem
 
+gem 'mini_magick' 
+gem 'fog'
+
 gem 'mimemagic'
 #↑ファイル内容と拡張子の一致を確認するためのgem
 
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
+
+
+
 
 
 
