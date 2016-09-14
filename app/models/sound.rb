@@ -25,10 +25,13 @@ class Sound < ActiveRecord::Base
             #file_name = SecureRandom.hex(10) + self.id.to_s
             file_name = 'sid' + self.object_id.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
+            #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
+            #インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
             puts('ファイル名'+file_name)
             File.open("app/assets/sounds/upfiles/#{file_name}", 'wb') { |f| f.write(file.read) }
             self.upfile = file_orgname
             self.path = file_name
             self.ext_name = File.extname(file_orgname).downcase
+            #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
     end
 end
