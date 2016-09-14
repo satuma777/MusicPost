@@ -1,5 +1,7 @@
 class Sound < ActiveRecord::Base
     #mount_uploader :sound, SoundUploader
+    mount_uploader :image, ImageUploader
+
     validates :title, presence: true
     validates :content, presence: true
     validate :check_sound

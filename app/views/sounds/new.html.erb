@@ -20,9 +20,12 @@
     音楽の説明
     <%= f.text_area :content, { class: "form-control content-field" } %>
     <br>
-    <lavel>ファイルを指定：
+    <lavel>投稿するファイルを指定：
         <%= f.file_field :upfile, size: 50 %>
         <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
+    </lavel>
+    <lavel>サムネイルを指定：
+        <%= f.file_field :image, size: 50 %>
     </lavel>
     <%= f.submit "アップロード" %>
 <% end %>
