@@ -29,21 +29,33 @@ class SoundsController < ApplicationController
     def create
         @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
+        file_img = params[:sound][:image]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
         perms = ['.mp3', '.ogg', '.wav']
+        perms_img = ['.jpg', '.jpeg', '.gif', '.png']
         if !file.nil?
-            file_orgname = file.original_filename
+            file_org = file.original_filename
+            file_org_img = file_img.original_filename
             #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す。
             #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返す。
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる。
-            if !perms.include?(File.extname(file_orgname).downcase) then
+            if !perms.include?(File.extname(file_org).downcase) then
                @sound.upfile = "ext_error"
-            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
+            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
                 @sound.upfile = "file_error"
             elsif file.size > 15.megabyte then
                 @sound.upfile = "size_error"
             end
+            #↑音声ファイルのチェック。
+            if !perms_img.include?(File.extname(file_org_img).downcase) then
+               @sound.image = "ext_error"
+            elsif MimeMagic.by_magic(file_img) != "image/jpg" && MimeMagic.by_magic(file_img) != "image/jpeg" && MimeMagic.by_magic(file_img) != "image/png" && MimeMagic.by_magic(file_img) != "image/x-citrix-png" && MimeMagic.by_magic(file_img) != "image/x-citrix-jpeg" && MimeMagic.by_magic(file_img) != "image/x-png" && MimeMagic.by_magic(file_img) != "image/pjpeg" then
+                @sound.image = "file_error"
+            elsif file_img.size > 1.megabyte then
+                @sound.image = "size_error"
+            end
+            #↑サムネイルとなる画像ファイルのチェック。
             unless @sound.valid?
                 render :new
             else
