@@ -6,6 +6,27 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+module CarrierWave
+  class Application < Rails::Application
+    config.i18n.load_path += Dir[
+      Pathname(CarrierWave.method(:root).source_location[0]).dirname
+      .join('carrierwave', 'locale', '*.{rb,yml}')
+    ]
+    config.i18n.default_locale = :ja
+    end
+end
+
+ config.action_view.field_error_proc = Proc.new do |html_tag, instance|
+      if instance.kind_of?(ActionView::Helpers::Tags::Label)
+        # skip when label
+        html_tag.html_safe
+      else
+        method_name = instance.instance_variable_get(:@method_name)
+        errors = instance.object.errors[method_name]
+        "<div class=\"has-error\">#{html_tag}<span class=\"help-block\">#{errors.first}</span></div>".html_safe
+      end
+    end
+
 module Music
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -15,7 +36,7 @@ module Music
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
-
+   
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :ja

@@ -1,7 +1,9 @@
 # encoding: utf-8
 
 class ImageUploader < CarrierWave::Uploader::Base
+  include CarrierWave::MimeTypes
 
+  process :set_content_type
   # Include RMagick or MiniMagick support:
   include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -27,10 +29,7 @@ end
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  process :resize_to_limit => [700, 700]
 
-
-  process :convert => 'jpg'
 
   # Process files as they are uploaded:
   # process :scale => [200, 300]
@@ -38,9 +37,14 @@ end
   # def scale(width, height)
   #   # do something
   # end
-  version :thumb do
-    process :resize_to_limit => [200, 200]
-end
+ 
+
+
+    process :resize_to_limit => [700, 700]
+    process :convert => 'jpg'
+    version :thumb do
+        process :resize_to_limit => [200, 200]
+    end
 
 
 
@@ -53,7 +57,11 @@ end
   # For images you might use something like this:
   def extension_white_list
    %w(jpg jpeg gif png)
-end
+    end
+
+def content_type_whitelist
+    /image\//
+  end
 
   def filename
     "#{secure_token}.#{file.extension}" if original_filename.present?
@@ -65,6 +73,9 @@ end
     model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
   end
 
+  def image?(new_file)
+    new_file != nil
+  end
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # def filename

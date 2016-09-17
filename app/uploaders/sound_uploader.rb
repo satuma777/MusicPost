@@ -1,9 +1,6 @@
 # encoding: utf-8
 
 class SoundUploader < CarrierWave::Uploader::Base
-  include CarrierWave::MimeTypes
-
-  process :set_content_type
   
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
