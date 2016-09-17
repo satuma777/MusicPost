@@ -1,5 +1,11 @@
 <p id="notice"><%= notice %></p>
 
+<% if @sound.image? %>
+    <%= image_tag @sound.image.thumb.url %>
+<% else %>
+    <%= image_tag('default.jpg', :size => "200x200") %>
+<% end %>
+
 <p>
   <strong>タイトル:</strong>
   <%= @sound.title %>
@@ -9,6 +15,8 @@
   <strong>説明:</strong>
   <%= @sound.content %>
 </p>
+
+
 
 <%= link_to 'Edit', edit_sound_path(@sound) %> |
 <%= link_to 'Back', sounds_path %>

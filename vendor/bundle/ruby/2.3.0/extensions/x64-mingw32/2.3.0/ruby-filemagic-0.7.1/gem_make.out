@@ -1,5 +1,5 @@
 current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/ruby-filemagic-0.7.1/ext/filemagic
-C:/Ruby23-x64/bin/ruby.exe -r ./siteconf20160904-8332-1uuc9p2.rb extconf.rb
+C:/Ruby23-x64/bin/ruby.exe -r ./siteconf20160917-4240-570lku.rb extconf.rb
 checking for main() in -lgnurx... no
 checking for magic_open() in -lmagic... no
 *** ERROR: missing required library to compile this module

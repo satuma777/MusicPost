@@ -2,6 +2,7 @@ class SoundsController < ApplicationController
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
+    require 'carrierwave/processing/mime_types'
 
     def index
         @sounds = Sound.all
@@ -29,6 +30,7 @@ class SoundsController < ApplicationController
     def create
         @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
+        #imagefile = params[:sound][:upfile]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
         perms = ['.mp3', '.ogg', '.wav']
@@ -44,6 +46,9 @@ class SoundsController < ApplicationController
             elsif file.size > 15.megabyte then
                 @sound.upfile = "size_error"
             end
+             #if MimeMagic.by_magic(imagefile) != "image/jpg" && MimeMagic.by_magic(imagefile) != "image/jpeg" && MimeMagic.by_magic(imagefile) != "image/png" && MimeMagic.by_magic(imagefile) != "image/x-citrix-png" && MimeMagic.by_magic(imagefile) != "image/x-citrix-jpeg" && MimeMagic.by_magic(imagefile) != "image/x-png" && MimeMagic.by_magic(imagefile) != "image/pjpeg" then
+                #@sound.image = "file_error"
+            #end
             unless @sound.valid?
                 render :new
             else

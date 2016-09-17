@@ -1,13 +1,16 @@
 class Sound < ActiveRecord::Base
+    require 'mimemagic'
+    require 'carrierwave/processing/mime_types'
     #mount_uploader :sound, SoundUploader
     mount_uploader :image, ImageUploader
 
     validates :title, presence: true
     validates :content, presence: true
     validate :check_sound
+    validate :check_image
 
      def check_sound
-        if upfile != nil
+        if upfile != nil 
             if upfile == "ext_error" then
                 errors[:base] << "投稿できるのは、mp3、ogg、wavのみです。"
             elsif upfile == "file_error" then
@@ -17,6 +20,14 @@ class Sound < ActiveRecord::Base
             end
         end
     end
+
+    def check_image
+        if image != nil 
+            if image.file.content_type != "image/jpg" && image.file.content_type != "image/jpeg" && image.file.content_type != "image/png" && image.file.content_type != "image/x-citrix-png" && image.file.content_type != "image/x-citrix-jpeg" && image.file.content_type != "image/x-png" && image.file.content_type != "image/pjpeg" then
+                errors[:base] << "不正なファイルです。"
+            end
+        end
+    end 
 
     def set_sound(file)
             file_orgname = file.original_filename
@@ -28,7 +39,7 @@ class Sound < ActiveRecord::Base
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
             puts('ファイル名'+file_name)
-            File.open("app/assets/sounds/upfiles/#{file_name}", 'wb') { |f| f.write(file.read) }
+            File.open("public/uploads/sound/sound/#{file_name}", 'wb') { |f| f.write(file.read) }
             self.upfile = file_orgname
             self.path = file_name
             self.ext_name = File.extname(file_orgname).downcase
