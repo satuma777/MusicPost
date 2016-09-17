@@ -1,5 +1,11 @@
 <p id="notice"><%= notice %></p>
 
+<% if @sound.image? %>
+    <%= image_tag(@sound.image, :size => "200x200") %>
+<% else %>
+    <%= image_tag('default.jpg', :size => "200x200") %>
+<% end %>
+
 <p>
   <strong>タイトル:</strong>
   <%= @sound.title %>

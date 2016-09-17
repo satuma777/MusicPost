@@ -1,7 +1,4 @@
 class Sound < ActiveRecord::Base
-    #mount_uploader :sound, SoundUploader
-    mount_uploader :image, ImageUploader
-
     validates :title, presence: true
     validates :content, presence: true
     validate :check_sound
@@ -16,6 +13,8 @@ class Sound < ActiveRecord::Base
             elsif upfile == "size_error" then
                 errors[:base] << "ファイルサイズは15MBまでです。"
             end
+        else
+            errors[:base] <<"アップロードする音声ファイルを選択してください。"
         end
     end
 
@@ -28,6 +27,8 @@ class Sound < ActiveRecord::Base
             elsif image == "size_error" then
                 errors[:base] << "ファイルサイズは1MBまでです。"
             end
+        else
+            errors[:base] <<"サムネイルを選択してください。"
         end
     end
 
