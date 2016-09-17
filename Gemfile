@@ -68,8 +68,11 @@ gem 'mimemagic'
 
 #gem "refile", require: "refile/rails"
 #gem "refile-mini_magick"
-
-
+#gem 'therubyracer'
+#gem 'less-rails'
+#gem 'twitter-bootstrap-rails'
+#gem 'libv8'
+#gem 'bootstrap-sass'
 
 
 

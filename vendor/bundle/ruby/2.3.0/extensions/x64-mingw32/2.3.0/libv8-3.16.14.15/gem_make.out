@@ -1,0 +1,18 @@
+current directory: C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8
+C:/Ruby23-x64/bin/ruby.exe -r ./siteconf20160917-372-vpz52.rb extconf.rb
+creating Makefile
+'patch' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/patcher.rb:15:in `block (2 levels) in patch!': failed to apply patch C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/patches/disable-building-tests.patch (RuntimeError)
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/patcher.rb:12:in `each'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/patcher.rb:12:in `block in patch!'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/patcher.rb:8:in `open'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/patcher.rb:8:in `patch!'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/builder.rb:57:in `block in build_libv8!'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/builder.rb:54:in `chdir'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/builder.rb:54:in `build_libv8!'
+	from C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/ext/libv8/location.rb:24:in `install!'
+	from extconf.rb:7:in `<main>'
+Applying C:/Users/terashin/rails_projects/musicpost/vendor/bundle/ruby/2.3.0/gems/libv8-3.16.14.15/patches/disable-building-tests.patch
+
+extconf failed, exit code 1
