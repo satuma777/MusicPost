@@ -18,6 +18,18 @@ class Sound < ActiveRecord::Base
         end
     end
 
+    def check_sound
+        if upfile != nil
+            if upfile == "ext_error" then
+                errors[:base] << "投稿できるのは、mp3、ogg、wavのみです。"
+            elsif upfile == "file_error" then
+                 errors[:base] << "不正なファイルです。"
+            elsif upfile == "size_error" then
+                errors[:base] << "ファイルサイズは15MBまでです。"
+            end
+        end
+    end
+
     def set_sound(file)
             file_orgname = file.original_filename
             #↑コントローラー側で定義されているfile_orgnameとは別物。

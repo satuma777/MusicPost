@@ -48,7 +48,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'coffee-script-source', '1.8.0'
 #↑railsのセットアップに必要なgem
 
-gem 'carrierwave'
+#gem 'carrierwave'
 #↑アップロードを機能を付与するgem
 
 #gem 'ruby-filemagic'
@@ -66,8 +66,8 @@ gem 'fog'
 gem 'mimemagic'
 #↑ファイル内容と拡張子の一致を確認するためのgem
 
-gem "refile", require: "refile/rails"
-gem "refile-mini_magick"
+#gem "refile", require: "refile/rails"
+#gem "refile-mini_magick"
 
 
 
