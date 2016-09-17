@@ -61,8 +61,9 @@ class SoundsController < ApplicationController
                     render :new
                 else
                    @sound.set_sound(file)
+                   @sound.set_image(file_img)
                     if @sound.save then
-                    redirect_to @sound, notice: "#{file_orgname.toutf8}をアップロードしました。"
+                    redirect_to @sound, notice: "#{file_org.toutf8}をアップロードしました。"
                     #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
                     #↑sound_path(@sound.id)でshowアクションに飛ぶ
                     else
