@@ -2,7 +2,7 @@ class SoundsController < ApplicationController
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
-    require 'carrierwave/processing/mime_types'
+    #require 'carrierwave/processing/mime_types'
 
     def index
         @sounds = Sound.all

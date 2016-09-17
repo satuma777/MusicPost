@@ -1,6 +1,5 @@
 class Sound < ActiveRecord::Base
     require 'mimemagic'
-    require 'carrierwave/processing/mime_types'
     #mount_uploader :sound, SoundUploader
     mount_uploader :image, ImageUploader
 
