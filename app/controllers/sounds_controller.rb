@@ -2,7 +2,6 @@ class SoundsController < ApplicationController
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
-    require 'carrierwave/processing/mime_types'
 
     def index
         @sounds = Sound.all
@@ -41,7 +40,7 @@ class SoundsController < ApplicationController
             #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる。
             if !perms.include?(File.extname(file_orgname).downcase) then
                @sound.upfile = "ext_error"
-            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" && MimeMagic.by_magic(file) != "audio/mpeg" then
+            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
                 @sound.upfile = "file_error"
             elsif file.size > 15.megabyte then
                 @sound.upfile = "size_error"
@@ -52,9 +51,16 @@ class SoundsController < ApplicationController
             unless @sound.valid?
                 render :new
             else
-               @sound.set_sound(file)
+                if MimeMagic.by_magic(file) != "audio/mp3" || MimeMagic.by_magic(file) != "audio/mpeg"  then
+                    @sound.ext_name = ".mp3"
+                elsif MimeMagic.by_magic(file) != "audio/wav" || MimeMagic.by_magic(file) != "audio/x-wav" then
+                    @sound.ext_name = ".wav"
+                elsif MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
+                    @sound.ext_name = ".ogg"
+                end
+                @sound.set_sound(file)
                 if @sound.save then
-                redirect_to @sound, notice: "#{file_orgname.toutf8}をアップロードしました。"
+                    redirect_to @sound, notice: "#{file_orgname.toutf8}をアップロードしました。"
                 #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
                 #↑sound_path(@sound.id)でshowアクションに飛ぶ
                 else

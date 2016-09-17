@@ -1,33 +1,27 @@
 class Sound < ActiveRecord::Base
-    require 'mimemagic'
-    require 'carrierwave/processing/mime_types'
     #mount_uploader :sound, SoundUploader
-    mount_uploader :image, ImageUploader
-
+    has_attached_file :image, :url =>  "/:class/:attachment/:id/:style_:filename",
+                                :default_url => "images/default.jpg",
+                                            :styles => { :normal => "100x100#", :large => '200x200#' },
+                                            :storage => :filesystem,
+                                            :whiny => false
+    validates_attachment_content_type :image, content_type:  ["image/jpeg", "image/gif", "image/png"]
     validates :title, presence: true
     validates :content, presence: true
     validate :check_sound
-    validate :check_image
+
 
      def check_sound
         if upfile != nil 
             if upfile == "ext_error" then
                 errors[:base] << "投稿できるのは、mp3、ogg、wavのみです。"
             elsif upfile == "file_error" then
-                 errors[:base] << "不正なファイルです。"
+                 errors[:base] << "ファイル形式が不正です。"
             elsif upfile == "size_error" then
                 errors[:base] << "ファイルサイズは15MBまでです。"
             end
         end
     end
-
-    def check_image
-        if image != nil 
-            if image.file.content_type != "image/jpg" && image.file.content_type != "image/jpeg" && image.file.content_type != "image/png" && image.file.content_type != "image/x-citrix-png" && image.file.content_type != "image/x-citrix-jpeg" && image.file.content_type != "image/x-png" && image.file.content_type != "image/pjpeg" then
-                errors[:base] << "不正なファイルです。"
-            end
-        end
-    end 
 
     def set_sound(file)
             file_orgname = file.original_filename
@@ -42,7 +36,13 @@ class Sound < ActiveRecord::Base
             File.open("public/uploads/sound/sound/#{file_name}", 'wb') { |f| f.write(file.read) }
             self.upfile = file_orgname
             self.path = file_name
-            self.ext_name = File.extname(file_orgname).downcase
             #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
     end
+
+protected
+  def secure_token
+    var = :"@#{mounted_as}_secure_token"
+    model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
+  end
+
 end

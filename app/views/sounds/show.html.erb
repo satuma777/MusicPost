@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <% if @sound.image? %>
-    <%= image_tag @sound.image.thumb.url %>
+    <%= image_tag @sound.image %>
 <% else %>
     <%= image_tag('default.jpg', :size => "200x200") %>
 <% end %>
