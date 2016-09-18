@@ -1,4 +1,7 @@
 class SoundsController < ApplicationController
+    @@sound_init = "sid"
+    @@image_init = "img"
+    @@image_s = "_s"
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
@@ -104,6 +107,14 @@ class SoundsController < ApplicationController
     # DELETE /sounds/1
     # DELETE /sounds/1.json
     def destroy
+        sound = @@sound_init.to_s+ @sound.path.to_s + @sound.ext_name.to_s
+        img = @@image_init.to_s+ @sound.path.to_s + @sound.img_ext_name.to_s
+        thumb_img = @@sound_init.to_s+ @sound.path.to_s + @@sound_s.to_s + @sound.img_ext_name.to_s
+        Dir.chdir '/uploads/sounds/sound/'
+        FileUtils.rm(Dir.glob(sound.to_s))
+        File.delete("app/public/uploads/sounds/sound/#{sound}")
+        File.delete("app/public/uploads/sounds/sound/#{img}")
+        File.delete("app/public/uploads/sounds/sound/#{thumb_imgl}")
         @sound.destroy
         respond_to do |format|
             format.html { redirect_to sounds_url, notice: '対象は無事消去されました。' }
