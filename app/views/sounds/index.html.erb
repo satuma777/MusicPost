@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Sounds</h1>
+<h1>投稿音楽一覧</h1>
 
 <table>
   <thead>
@@ -13,17 +13,31 @@
 
   <tbody>
     <% @sounds.each do |sound| %>
-      <tr>
-        <td><%= sound.title %></td>
-        <td><%= sound.content %></td>
-        <td><%= link_to 'Show', sound %></td>
-        <td><%= link_to 'Edit', edit_sound_path(sound) %></td>
-        <td><%= link_to 'Destroy', sound, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+        <%= render 'sounds/sound', sound:sound %>
+
+<%
+=begin
+%>
+        ↑パーシャル（_sound.html.erb）のsoundに、sound:（このsoundの部分がパーシャルで用いられている変数名）でeachでのsoundを渡している。
+        ↑<%= #render sound %>と書くこともできる。この場合、上のsoundにあたる箇所が全て同じ変数名でなければならない（つまり、パーシャル側でも同じ名前の変数名を用いなければならない。）。
+<%
+=end
+%>
+
     <% end %>
+
+<%
+=begin
+%>
+    ↑<%@sounds.each do |sound| %>も省略して、<%=render @sounds %>と書くこともできる。これだけで、<tbody>タグに囲まれた部分を生成してくれる。（#は実際に書く時は、いらない（コメントアウト用）。）
+<%
+=end
+%>
+
   </tbody>
+
 </table>
 
 <br>
 
-<%= link_to 'New Sound', new_sound_path %>
+<%= link_to '音楽を投稿する', new_sound_path %>

@@ -1,6 +1,7 @@
-<h1>Editing Sound</h1>
+<h1>投稿した音楽を編集する</h1>
 
+<%= image_for(@sound) %>
 <%= render 'form' %>
 
-<%= link_to 'Show', @sound %> |
-<%= link_to 'Back', sounds_path %>
+<%= link_to '詳細', @sound %> |
+<%= link_to '戻る', sounds_path %>

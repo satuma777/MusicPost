@@ -1,0 +1,30 @@
+ <%= form_for(@sound) do |f| %>
+<!--↑form_tag sound_path(@sound.id)と同じ。method（Verb）は、id（@sound.id）を引数に取る（この時は、patch、updateアクションに飛ぶ）か取らない（この時は、post、createアクションに飛ぶ）かで自動的に判断してくれる。-->
+    <% if @sound.errors.any? %>
+        <div class="alert alert-danger">
+            <p><%= @sound.errors.count %>件のエラーがあります。</p>
+
+            <ul>
+                <% @sound.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+ タイトル
+    <%= f.text_field :title, class: "form-control title-field" %>
+    <!--クラスは、=ではなく、:（ハッシュ）で指定する。-->
+    音楽の説明
+    <%= f.text_area :content, class: "form-control content-field" %>
+    <br>
+    <lavel class: "control-label">投稿するファイルを指定：
+        <%= f.file_field :upfile, size: 50 , class: "form-control upfile-field" %>
+        <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
+    </lavel>
+    <lavel class: "control-label">サムネイルを指定：
+        <%= f.file_field :image, size: 50 , class: "form-control  image-field" %>
+    </lavel>
+    <%= f.submit "アップロード" %>
+
+<% end %>

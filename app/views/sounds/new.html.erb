@@ -1,31 +1,12 @@
 <h1>音楽を投稿する</h1>
 
-<%= form_for(@sound) do |f| %>
-<!--↑action:で現在のビュー（ここではupload.html.erb）に対応するコントローラーのアクションであるupload_processを呼び出している-->
-<!--↑multipartオプションを有効にしておかないと、正しくデータを受信できない。-->
-    <% if @sound.errors.any? %>
-        <div class="alert alert-danger">
-            <p><%= @sound.errors.count %>件のエラーがあります。</p>
+<%= render 'form'%>
 
-            <ul>
-                <% @sound.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-                <% end %>
-            </ul>
-        </div>
-    <% end %>
-
-    タイトル
-    <%= f.text_field :title, { class: "form-control title-field" } %>
-    音楽の説明
-    <%= f.text_area :content, { class: "form-control content-field" } %>
-    <br>
-    <lavel class: "control-label">投稿するファイルを指定：
-        <%= f.file_field :upfile, size: 50 , class: "form-control" %>
-        <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
-    </lavel>
-    <lavel class: "control-label">サムネイルを指定：
-        <%= f.file_field :image, size: 50 , class: "form-control" %>
-    </lavel>
-    <%= f.submit "アップロード" %>
-<% end %>
+<%
+=begin
+%>
+    ↑パーシャルファイルと、そのパーシャルを呼び出すファイルが同じフォルダ内にある場合には、呼び出す際にフォルダ名を省略することができる。呼び出す時、_は必要ない。
+    ↑<%=# render 'sounds/form' %>と書いても同じ。（#は実際に書く時は、いらない（コメントアウト用）。）
+<%
+=end
+%>

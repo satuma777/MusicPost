@@ -103,6 +103,8 @@
       second: 秒
       year: 年
   errors:
+    #format: "%{attribute}""%{message}"
+    #↑attributeのところにモデルのカラム名が入る。
     format: "%{message}"
     messages:
       accepted: を受諾してください

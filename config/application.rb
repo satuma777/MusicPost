@@ -16,6 +16,9 @@ module Music
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| "<span class='field_with_errors'>#{html_tag}</span>".html_safe }
+    #↑バリデーションエラーが生じた時に、エラーの生じたフォーム(class: "form-control"を付与したもの)をここで指定したHTMLタグで囲む。
+    #↑この付与したタグを編集することで、バリデーションの時のフォームの色などを変えられる。
+    
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :ja

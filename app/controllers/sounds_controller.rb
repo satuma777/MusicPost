@@ -3,6 +3,7 @@ class SoundsController < ApplicationController
     require 'kconv'
     require 'mimemagic'
     require 'RMagick'
+    require "fileutils"
 
     def index
         @sounds = Sound.all
@@ -61,8 +62,10 @@ class SoundsController < ApplicationController
                 unless @sound.valid?
                     render :new
                 else
-                   @sound.set_sound(file)
-                   @sound.set_image(file_img)
+                    file_id = @sound.object_id
+                   @sound.set_sound(file, file_id)
+                   @sound.set_image(file_img, file_id)
+                   @sound.path = file_id
                     if @sound.save then
                         redirect_to @sound, notice: "#{file_org.toutf8}をアップロードしました。"
                         #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
@@ -88,13 +91,14 @@ class SoundsController < ApplicationController
     def update
         respond_to do |format|
             if @sound.update(sound_params)
-                format.html { redirect_to @sound, notice: 'Sound was successfully updated.' }
+                format.html { redirect_to @sound, notice: '編集内容が更新されました。' }
                 format.json { render :show, status: :ok, location: @sound }
             else
                 format.html { render :edit }
                 format.json { render json: @sound.errors, status: :unprocessable_entity }
             end
         end
+        #↑format.jsonを設定することで、http://localhost:3000/sounds/index.jsonと".json"をつけるとjsonファイルへアクセスできるようになる。
     end
 
     # DELETE /sounds/1
@@ -102,7 +106,7 @@ class SoundsController < ApplicationController
     def destroy
         @sound.destroy
         respond_to do |format|
-            format.html { redirect_to sounds_url, notice: 'Sound was successfully destroyed.' }
+            format.html { redirect_to sounds_url, notice: '対象は無事消去されました。' }
             format.json { head :no_content }
         end
     end
