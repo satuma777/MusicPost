@@ -2,6 +2,7 @@ class SoundsController < ApplicationController
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
+    require 'RMagick'
 
     def index
         @sounds = Sound.all
@@ -53,7 +54,7 @@ class SoundsController < ApplicationController
                    @sound.image = "ext_error"
                 elsif MimeMagic.by_magic(file_img) != "image/jpg" && MimeMagic.by_magic(file_img) != "image/jpeg" && MimeMagic.by_magic(file_img) != "image/png" && MimeMagic.by_magic(file_img) != "image/x-citrix-png" && MimeMagic.by_magic(file_img) != "image/x-citrix-jpeg" && MimeMagic.by_magic(file_img) != "image/x-png" && MimeMagic.by_magic(file_img) != "image/pjpeg" then
                     @sound.image = "file_error"
-                elsif file_img.size > 1.megabyte then
+                elsif file_img.size > 5.megabyte then
                     @sound.image = "size_error"
                 end
                 #↑サムネイルとなる画像ファイルのチェック。
@@ -63,9 +64,9 @@ class SoundsController < ApplicationController
                    @sound.set_sound(file)
                    @sound.set_image(file_img)
                     if @sound.save then
-                    redirect_to @sound, notice: "#{file_org.toutf8}をアップロードしました。"
-                    #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
-                    #↑sound_path(@sound.id)でshowアクションに飛ぶ
+                        redirect_to @sound, notice: "#{file_org.toutf8}をアップロードしました。"
+                        #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
+                        #↑sound_path(@sound.id)でshowアクションに飛ぶ
                     else
                         render :new
                     end
@@ -114,6 +115,6 @@ class SoundsController < ApplicationController
 
         # Never trust parameters from the scary internet, only allow the white list through.
         def sound_params
-            params.require(:sound).permit(:title, :content, :upfile, :image, :path ,:ext_name)
+            params.require(:sound).permit(:title, :content, :upfile, :image)
         end
 end
