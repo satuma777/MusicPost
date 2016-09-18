@@ -35,6 +35,7 @@ class SoundsController < ApplicationController
         @sound = Sound.new(sound_params)
         file = params[:sound][:upfile]
         file_img = params[:sound][:image]
+        id = params[:sound][:id]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
         perms = ['.mp3', '.ogg', '.wav']
@@ -66,8 +67,8 @@ class SoundsController < ApplicationController
                     render :new
                 else
                     file_id = @sound.object_id
-                   @sound.set_sound(file, file_id)
-                   @sound.set_image(file_img, file_id)
+                   @sound.set_sound(file, file_id, id)
+                   @sound.set_image(file_img, file_id, id)
                    @sound.path = file_id
                     if @sound.save then
                         redirect_to @sound, notice: "#{file_org.toutf8}をアップロードしました。"
