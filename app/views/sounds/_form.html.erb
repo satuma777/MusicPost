@@ -18,18 +18,25 @@
     <div>
      タイトル
      </div>
-    <%= f.text_field :title, class: "form-control title-field" %>
+    <%= f.text_field :title, placeholder: "タイトルを入力してください。", class: "form-control title-field"%>
     <!--クラスは、=ではなく、:（ハッシュ）で指定する。-->
     </p>
     <p>
     <div>
     音楽の説明
     </div>
-    <%= f.text_area :content, class: "form-control content-field" %>
+    <%= f.text_area :content, maxlength:1000, placeholder: "音楽の説明を入力してください。", class: "form-control content-field" %>
+<%
+=begin
+%>
+    ↑maxlengthにおいて、全角文字は2文字と数えられる。
+<%
+=end
+%>
     </p>
     <p>
     <div>
-    <lavel class: "control-label">アップロードするファイルを指定：
+    <lavel class: "control-label"><%= @sound_value %>
     </div>
         <%= f.file_field :upfile, size: 50 , class: "form-control upfile-field" %>
         <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
@@ -37,7 +44,7 @@
     </p>
     <p>
     <div>
-    <lavel class: "control-label">サムネイルを指定：
+    <lavel class: "control-label"><%= @thumb_value %>
     </div>
         <%= f.file_field :image, size: 50 , class: "form-control  image-field" %>
     </lavel>

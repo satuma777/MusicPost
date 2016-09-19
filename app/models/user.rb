@@ -3,5 +3,5 @@ class User < ActiveRecord::Base
 
     validates :email, presence:true,
                 uniqueness:true
-    #↑語尾に;などはいらない
+    #↑語尾に";"（セミコロン）などはいらない
 end
