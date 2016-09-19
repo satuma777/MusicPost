@@ -1,17 +1,36 @@
 <p id="notice"><%= notice %></p>
 
+<table>
+<tr>
+<th>
 <%= image_for(@sound, 200) %>
+</th>
 
-<p>
+<th>
+<div>
   <strong>タイトル:</strong>
   <%= @sound.title %>
-</p>
-
-<p>
+</div>
+<div>
   <strong>説明:</strong>
   <%= @sound.content %>
+</div>
+
+<br>
+
+<p>
+<%= audio_for(@sound) %>
 </p>
 
+<br>
+
+<div>
 <%= link_to '編集する', edit_sound_path(@sound) %>
 <%= link_to '消去する', sound_path(@sound.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
 <%= link_to '戻る', sounds_path %>
+</div>
+</th>
+</tr>
+</table>
+
+
