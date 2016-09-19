@@ -1,7 +1,9 @@
 class Sound < ActiveRecord::Base
-    @@sound_init = "sid"
-    @@image_init = "img"
+    @@nhead_sound = "sid"
+    @@nhead_image = "img"
     @@image_s = "_s"
+    @@size_sound = 15
+    @@size_image = 6
     #↑@@でクラス変数を定義。
 
     require 'RMagick'
@@ -32,7 +34,7 @@ class Sound < ActiveRecord::Base
             elsif upfile == "file_error" then
                  errors[:upfile] << "不正なファイル形式です。mp3、ogg、wavどれかのファイル形式にしてください。"
             elsif upfile == "size_error" then
-                errors[:upfile] << "ファイルサイズは15MBまでです。"
+                errors[:upfile] << "ファイルサイズは" + @@size_sound.to_s + "MBまでです。"
             end
         else
             errors[:upfile] <<"アップロードする音声ファイルを選択してください。"
@@ -46,7 +48,7 @@ class Sound < ActiveRecord::Base
             elsif image == "file_error" then
                  errors[:image] << "不正なファイル形式です。jpg、jpeg、gif、pngどれかのファイル形式にしてください。"
             elsif image == "size_error" then
-                errors[:image] << "ファイルサイズは5MBまでです。"
+                errors[:image] << "ファイルサイズは" + @@size_image.to_s + "MBまでです。"
             end
         else
             errors[:image] <<"サムネイルを選択してください。"
@@ -59,7 +61,7 @@ class Sound < ActiveRecord::Base
             #↑コントローラー側で定義されているfile_orgnameとは別物。
             file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            file_name = @@sound_init.to_s + file_id.to_s
+            file_name = @@nhead_sound.to_s + file_id.to_s
              full_file_name = file_name + File.extname(file_org_name).downcase
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
@@ -87,7 +89,7 @@ class Sound < ActiveRecord::Base
             #↑コントローラー側で定義されているfile_orgnameとは別物。
             file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            file_name = @@image_init.to_s + file_id.to_s
+            file_name = @@nhead_image.to_s + file_id.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。

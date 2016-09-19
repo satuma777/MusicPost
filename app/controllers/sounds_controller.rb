@@ -1,7 +1,11 @@
 class SoundsController < ApplicationController
-    @@sound_init = "sid"
-    @@image_init = "img"
+    @@nhead_sound = "sid"
+    @@nhead_image = "img"
     @@image_s = "_s"
+    @@size_sound = 15
+    @@size_image = 6
+
+
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
     require 'kconv'
     require 'mimemagic'
@@ -22,6 +26,8 @@ class SoundsController < ApplicationController
     end
 
     def new
+        @size_sound = @@size_sound
+        @size_image = @@size_image
         @sound = Sound.new
     end
 
@@ -51,7 +57,7 @@ class SoundsController < ApplicationController
                    @sound.upfile = "ext_error"
                 elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
                     @sound.upfile = "file_error"
-                elsif file.size > 15.megabyte then
+                elsif file.size > @@size_sound.megabyte then
                     @sound.upfile = "size_error"
                 end
                 #↑音声ファイルのチェック。
@@ -59,7 +65,7 @@ class SoundsController < ApplicationController
                    @sound.image = "ext_error"
                 elsif MimeMagic.by_magic(file_img) != "image/jpg" && MimeMagic.by_magic(file_img) != "image/jpeg" && MimeMagic.by_magic(file_img) != "image/png" && MimeMagic.by_magic(file_img) != "image/x-citrix-png" && MimeMagic.by_magic(file_img) != "image/x-citrix-jpeg" && MimeMagic.by_magic(file_img) != "image/x-png" && MimeMagic.by_magic(file_img) != "image/pjpeg" then
                     @sound.image = "file_error"
-                elsif file_img.size > 5.megabyte then
+                elsif file_img.size > @@size_image.megabyte then
                     @sound.image = "size_error"
                 end
                 #↑サムネイルとなる画像ファイルのチェック。
@@ -110,7 +116,7 @@ class SoundsController < ApplicationController
     def destroy
         upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s
         #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-        FileUtils.rm_rf(upfolder_path, :secure => true)
+        FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
         @sound.destroy
         respond_to do |format|
             format.html { redirect_to sounds_url, notice: @sound.upfile.to_s + 'は無事消去されました。' }
@@ -124,11 +130,13 @@ class SoundsController < ApplicationController
         upfolder_path = ""
         @sounds.each do |sound|
             upfolder_path = "./public/uploads/sounds/" + sound.path.to_s
-            FileUtils.rm_rf(upfolder_path, :secure => true)
+            FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
+        end
+        @sounds.each do |sound|
             sound.destroy
         end
         respond_to do |format|
-            format.html { redirect_to sounds_url, notice: '対象は無事消去されました。' }
+            format.html { redirect_to sounds_url, notice: '全てのファイルが無事消去されました。' }
             format.json { head :no_content }
         end
     end
@@ -143,4 +151,5 @@ class SoundsController < ApplicationController
         def sound_params
             params.require(:sound).permit(:title, :content, :upfile, :image)
         end
+
 end
