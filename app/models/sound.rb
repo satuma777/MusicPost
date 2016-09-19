@@ -1,11 +1,6 @@
-class Sound < ActiveRecord::Base
-    @@nhead_sound = "sid"
-    @@nhead_image = "img"
-    @@image_s = "_s"
-    @@size_sound = 15
-    @@size_image = 6
-    #↑@@でクラス変数を定義。
+#↓"Settings."の付いたものは、/config/の"settings.yml"で定義している定数を表す。
 
+class Sound < ActiveRecord::Base
     require 'RMagick'
     require "fileutils"
 
@@ -34,7 +29,7 @@ class Sound < ActiveRecord::Base
             elsif upfile == "file_error" then
                  errors[:upfile] << "不正なファイル形式です。mp3、ogg、wavどれかのファイル形式にしてください。"
             elsif upfile == "size_error" then
-                errors[:upfile] << "ファイルサイズは" + @@size_sound.to_s + "MBまでです。"
+                errors[:upfile] << "ファイルサイズは" + Settings.size_sound.to_s + "MBまでです。"
             end
         else
             errors[:upfile] <<"アップロードする音声ファイルを選択してください。"
@@ -48,39 +43,40 @@ class Sound < ActiveRecord::Base
             elsif image == "file_error" then
                  errors[:image] << "不正なファイル形式です。jpg、jpeg、gif、pngどれかのファイル形式にしてください。"
             elsif image == "size_error" then
-                errors[:image] << "ファイルサイズは" + @@size_image.to_s + "MBまでです。"
+                errors[:image] << "ファイルサイズは" + Settings.size_image.to_s + "MBまでです。"
             end
         else
             errors[:image] <<"サムネイルを選択してください。"
         end
     end
 
-    def set_sound(file, file_id, id)
-        if !file.nil?
-            file_org_name = file.original_filename
-            #↑コントローラー側で定義されているfile_orgnameとは別物。
-            file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-            #file_name = SecureRandom.hex(10) + self.id.to_s
-            file_name = @@nhead_sound.to_s + file_id.to_s
-             full_file_name = file_name + File.extname(file_org_name).downcase
-            #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
-            #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
-            #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
-            #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
+    def set_sound(file, file_id, use_for)
+       file_org_name = file.original_filename
+        #↑コントローラー側で定義されているfile_orgnameとは別物。
+        file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
+        #file_name = SecureRandom.hex(10) + self.id.to_s
+        file_name = Settings.nhead_sound.to_s + file_id.to_s
+         full_file_name = file_name + File.extname(file_org_name).downcase
+        #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
+        #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
+        #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
+        folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
+        #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
+        if use_for == "new" then
             FileUtils.mkdir_p(folder)
-            File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
-            self.upfile = file_org_name
-            self.ext_name = File.extname(file_org_name).downcase
-            #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
+        else
+            FileUtils.rm_rf(folder, :secure => true) rescue nil
+            FileUtils.mkdir_p(folder)
         end
+        File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
+        self.upfile = file_org_name
+        self.ext_name = File.extname(file_org_name).downcase
+        #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
     end
-    def set_image(file, file_id, id)
-         if !file.nil?
+    def set_image(file, file_id, use_for)
             org_img = file.read
             #↑read メソッドを呼ぶと，バイナリ（元のデータ、ここでは画像ファイル）が取得できる，一度呼ぶと取得できなくなる．
             #↑そのため、readで一度バイナリを取得したら何かの変数に入れておく。
-            
             edit_img = Magick::Image.from_blob(org_img).shift
             normal_img = create_square_thumbnail(edit_img, 500).to_blob
             small_img = create_square_thumbnail(edit_img, 200).to_blob
@@ -89,21 +85,26 @@ class Sound < ActiveRecord::Base
             #↑コントローラー側で定義されているfile_orgnameとは別物。
             file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            file_name = @@nhead_image.to_s + file_id.to_s
+            file_name = Settings.nhead_image.to_s + file_id.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            file_s_name = file_name + @@image_s.to_s
+            file_s_name = file_name + Settings.image_s.to_s
             full_file_name = file_name + File.extname(file_org_name).downcase
             full_file_s_name = file_s_name + File.extname(file_org_name).downcase
             folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-            FileUtils.mkdir_p(folder)
+            FileUtils.rm_rf(folder, :secure => true) rescue nil
+            if use_for == "new" then
+                FileUtils.mkdir_p(folder)
+            else
+                FileUtils.rm_rf(folder, :secure => true) rescue nil
+                FileUtils.mkdir_p(folder)
+            end
             File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }
             File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }
             self.image = file_org_name
             self.img_ext_name = File.extname(file_org_name).downcase
-        end
     end
 
     private

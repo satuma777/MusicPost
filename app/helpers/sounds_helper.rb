@@ -1,13 +1,11 @@
+#↓"Settings."の付いたものは、/config/の"settings.yml"で定義している定数を表す。
+
 module SoundsHelper
-    @@nhead_sound = "sid"
-    @@nhead_image = "img"
-    @@image_s = "_s"
-    
-    def image_for(sound, size)
+  def image_for(sound, size)
         if sound.path
           # image_tagを用いてuserのプロフィール画像を表示してください
           #normal_path = sound.img_path.to_s + sound.img_ext_name.to_s
-          thumb_path = "/uploads/sounds/" + sound.path.to_s + "/thumbnail/" +@@nhead_image.to_s + sound.path.to_s + @@image_s.to_s + sound.img_ext_name.to_s
+          thumb_path = "/uploads/sounds/" + sound.path.to_s + "/thumbnail/" +Settings.nhead_image.to_s + sound.path.to_s + Settings.image_s.to_s + sound.img_ext_name.to_s
           image_tag thumb_path, class: "thumbnail_img", :size => size.to_s + "x" + size.to_s
           #image_tag "/uploads/sounds/image/normal/#{normal_path}", class: "thumbnail_img"
           #↑class:でHTMLでのclassを設定できる。
@@ -22,7 +20,7 @@ module SoundsHelper
         if sound.path
           # image_tagを用いてuserのプロフィール画像を表示してください
           #normal_path = sound.img_path.to_s + sound.img_ext_name.to_s
-          audio_path = "/uploads/sounds/" + sound.path.to_s + "/sound/" +@@nhead_sound.to_s + sound.path.to_s + sound.ext_name.to_s
+          audio_path = "/uploads/sounds/" + sound.path.to_s + "/sound/" + Settings.nhead_sound.to_s + sound.path.to_s + sound.ext_name.to_s
           audio_tag(audio_path, :controls => true)
           #image_tag "/uploads/sounds/image/normal/#{normal_path}", class: "thumbnail_img"
           #↑class:でHTMLでのclassを設定できる。

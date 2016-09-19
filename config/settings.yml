@@ -1,0 +1,11 @@
+nhead_sound: "sid"
+nhead_image: "img"
+image_s: "_s"
+size_sound: 15
+size_image: 6
+show_size_image: 200
+index_size_image: 80
+new_sound_value: "アップロードするファイルを選択してください。"
+new_thumb_value: "サムネイルを選択してください。"
+edit_sound_value: "ファイルを変更する場合は選択してください。"
+edit_thumb_value: "サムネイルを変更する場合は選択してください。"

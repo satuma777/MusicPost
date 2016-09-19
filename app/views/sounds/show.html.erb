@@ -25,7 +25,7 @@
 <br>
 
 <div>
-<%= link_to '編集する', edit_sound_path(@sound, @index_size_image) %>
+<%= link_to '編集する', edit_sound_path(@sound.id) %>
 <%= link_to '消去する', sound_path(@sound.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
 <%= link_to '戻る', sounds_path %>
 </div>

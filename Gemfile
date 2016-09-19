@@ -66,6 +66,8 @@ gem 'fog'
 gem 'mimemagic'
 #↑ファイル内容と拡張子の一致を確認するためのgem
 
+gem 'config'
+
 #gem "refile", require: "refile/rails"
 #gem "refile-mini_magick"
 #gem 'therubyracer'
