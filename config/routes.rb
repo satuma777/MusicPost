@@ -17,4 +17,6 @@ Rails.application.routes.draw do
     root 'home#top'
     get '/alert' => 'home#alert'
 
+    delete '/sounds' => 'sounds#all_destroy', as: 'all_destroy'
+
 end

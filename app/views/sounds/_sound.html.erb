@@ -1,4 +1,14 @@
 <tr>
+        <td><%= image_for(sound, 80) %></td>
         <td><%= link_to sound.title, sound_path(sound.id) %></td>
         <td><%= sound.content %></td>
+
+<%
+=begin
+%>
+        ↑ここでのsoundは定義もとの@soundを表す。
+<%
+=end
+%>
+
 </tr>

@@ -2,6 +2,7 @@ class Sound < ActiveRecord::Base
     @@sound_init = "sid"
     @@image_init = "img"
     @@image_s = "_s"
+    #↑@@でクラス変数を定義。
 
     require 'RMagick'
     require "fileutils"
@@ -64,6 +65,7 @@ class Sound < ActiveRecord::Base
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
             folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
+            #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
             File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }  rescue nil
             self.upfile = file_org_name
@@ -93,6 +95,7 @@ class Sound < ActiveRecord::Base
             full_file_name = file_name + File.extname(file_org_name).downcase
             full_file_s_name = file_s_name + File.extname(file_org_name).downcase
             folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
+            #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
             File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }  rescue nil
             File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }  rescue nil

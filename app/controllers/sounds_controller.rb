@@ -108,15 +108,25 @@ class SoundsController < ApplicationController
     # DELETE /sounds/1
     # DELETE /sounds/1.json
     def destroy
-        sound = @@sound_init.to_s+ @sound.path.to_s + @sound.ext_name.to_s
-        img = @@image_init.to_s+ @sound.path.to_s + @sound.img_ext_name.to_s
-        thumb_img = @@sound_init.to_s+ @sound.path.to_s + @@sound_s.to_s + @sound.img_ext_name.to_s
-        Dir.chdir '/uploads/sounds/sound/'
-        FileUtils.rm(Dir.glob(sound.to_s))
-        File.delete("app/public/uploads/sounds/sound/#{sound}")
-        File.delete("app/public/uploads/sounds/sound/#{img}")
-        File.delete("app/public/uploads/sounds/sound/#{thumb_imgl}")
+        upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s
+        #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
+        FileUtils.rm_rf(upfolder_path, :secure => true)
         @sound.destroy
+        respond_to do |format|
+            format.html { redirect_to sounds_url, notice: @sound.upfile.to_s + 'は無事消去されました。' }
+            format.json { head :no_content }
+        end
+    end
+
+    def all_destroy
+        @sounds = Sound.all
+        #↑Sound.allを使うと、テーブルの全てのデータを取得できる。
+        upfolder_path = ""
+        @sounds.each do |sound|
+            upfolder_path = "./public/uploads/sounds/" + sound.path.to_s
+            FileUtils.rm_rf(upfolder_path, :secure => true)
+            sound.destroy
+        end
         respond_to do |format|
             format.html { redirect_to sounds_url, notice: '対象は無事消去されました。' }
             format.json { head :no_content }
