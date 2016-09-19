@@ -28,9 +28,9 @@ class Sound < ActiveRecord::Base
     def upfile_check
         if upfile != nil
             if upfile == "ext_error" then
-                errors[:upfile] << "投稿できるのは、mp3、ogg、wavのみです。"
+                errors[:upfile] << "アップロードできるのは、mp3、ogg、wavのみです。"
             elsif upfile == "file_error" then
-                 errors[:upfile] << "不正なファイル形式です。"
+                 errors[:upfile] << "不正なファイル形式です。mp3、ogg、wavどれかのファイル形式にしてください。"
             elsif upfile == "size_error" then
                 errors[:upfile] << "ファイルサイズは15MBまでです。"
             end
@@ -42,11 +42,11 @@ class Sound < ActiveRecord::Base
     def image_check
         if image != nil
             if image == "ext_error" then
-                errors[:image] << "投稿できるのは、jpg、jpeg、gif、pngのみです。"
+                errors[:image] << "アップロードできるのは、jpg、jpeg、gif、pngのみです。"
             elsif image == "file_error" then
-                 errors[:image] << "不正なファイル形式です。"
+                 errors[:image] << "不正なファイル形式です。jpg、jpeg、gif、pngどれかのファイル形式にしてください。"
             elsif image == "size_error" then
-                errors[:image] << "ファイルサイズは1MBまでです。"
+                errors[:image] << "ファイルサイズは5MBまでです。"
             end
         else
             errors[:image] <<"サムネイルを選択してください。"
@@ -67,7 +67,7 @@ class Sound < ActiveRecord::Base
             folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
-            File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }  rescue nil
+            File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
             self.upfile = file_org_name
             self.ext_name = File.extname(file_org_name).downcase
             #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
@@ -97,8 +97,8 @@ class Sound < ActiveRecord::Base
             folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
-            File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }  rescue nil
-            File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }  rescue nil
+            File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }
+            File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }
             self.image = file_org_name
             self.img_ext_name = File.extname(file_org_name).downcase
         end
