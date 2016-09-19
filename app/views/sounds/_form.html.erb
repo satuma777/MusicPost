@@ -12,19 +12,41 @@
         </div>
     <% end %>
 
- タイトル
+    <br>
+
+    <p>
+    <div>
+     タイトル
+     </div>
     <%= f.text_field :title, class: "form-control title-field" %>
     <!--クラスは、=ではなく、:（ハッシュ）で指定する。-->
+    </p>
+    <p>
+    <div>
     音楽の説明
+    </div>
     <%= f.text_area :content, class: "form-control content-field" %>
-    <br>
-    <lavel class: "control-label">投稿するファイルを指定：
+    </p>
+    <p>
+    <div>
+    <lavel class: "control-label">アップロードするファイルを指定：
+    </div>
         <%= f.file_field :upfile, size: 50 , class: "form-control upfile-field" %>
         <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
     </lavel>
+    </p>
+    <p>
+    <div>
     <lavel class: "control-label">サムネイルを指定：
+    </div>
         <%= f.file_field :image, size: 50 , class: "form-control  image-field" %>
     </lavel>
+    </p>
+
+    <br>
+
+    <p>
     <%= f.submit "アップロード" %>
+    </p>
 
 <% end %>
