@@ -37,7 +37,9 @@ class SoundsController < ApplicationController
     # POST /sounds.json
     def create
         @sound = Sound.new(sound_params)
-        use_for = "new"
+        @sound_value = Settings.new_sound_value
+        @thumb_value = Settings.new_thumb_value
+        use_for = 'new'
         file = params[:sound][:upfile]
         file_img = params[:sound][:image]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
@@ -45,7 +47,7 @@ class SoundsController < ApplicationController
         perms = ['.mp3', '.ogg', '.wav']
         perms_img = ['.jpg', '.jpeg', '.gif', '.png']
         if !file.nil? && !file_img.nil?
-            save_upfiles(file, file_img, perms, perms_img)
+            check_upfiles(file, file_img, perms, perms_img)
             #↑サムネイルとなる画像ファイルのチェック。
             unless @sound.valid?
                 render :new
@@ -72,32 +74,39 @@ class SoundsController < ApplicationController
     # PATCH/PUT /sounds/1
     # PATCH/PUT /sounds/1.json
     def update
-        use_for = "edit"
-        file = params[:upfile]
-        file_img = params[:image]
+        @sound_value = Settings.edit_sound_value
+        @thumb_value = Settings.edit_thumb_value
+        use_for = 'edit'
+        file = params[:sound][:upfile]
+        file_img = params[:sound][:image]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
         perms = ['.mp3', '.ogg', '.wav']
         perms_img = ['.jpg', '.jpeg', '.gif', '.png']
         if !file.nil? || !file_img.nil?
-            save_upfiles(file, file_img, perms, perms_img)
+            if !file.nil?
+                pre_sound_file = "./public/uploads/sounds/" + @sound.path.to_s + "/sound" + Settings.nhead_sound.to_s + @sound.path.to_s + File.extname(@sound.upfile).downcase
+                file = File.open(pre_sound_file, 'r')
+            end
+            if !file_img.nil?
+                pre_image_file = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail" + Settings.nhead_image.to_s + @sound.path.to_s + File.extname(@sound.image).downcase
+                file = File.open(pre_image_file, 'r')
+            end
+            check_upfiles(file, file_img, perms, perms_img)
             #↑サムネイルとなる画像ファイルのチェック。
             unless @sound.valid?
                 render :edit
             else
-                file_id = @sound.path
+                folder = "./public/uploads/sounds/" + @sound.path.to_s
+                FileUtils.rm_rf(folder, :secure => true) rescue nil
+                file_id = @sound.object_id
                @sound.set_sound(file, file_id, use_for)
                @sound.set_image(file_img, file_id, use_for)
+               @sound.path = file_id
+               update_upfiles
             end
-        end
-        respond_to do |format|
-            if @sound.update(sound_params)
-                format.html { redirect_to @sound, notice: '編集内容が更新されました。' }
-                format.json { render :show, status: :ok, location: @sound }
-            else
-                format.html { render :edit }
-                format.json { render json: @sound.errors, status: :unprocessable_entity }
-            end
+        else
+            update_upfiles
         end
     end
 
@@ -142,27 +151,44 @@ class SoundsController < ApplicationController
             params.require(:sound).permit(:title, :content, :upfile, :image)
         end
 
-        def save_upfiles(file, file_img, perms, perms_img)
-            file_org = file.original_filename
-            file_org_img = file_img.original_filename
-            #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す。
-            #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返す。
-            #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる。
-            if !perms.include?(File.extname(file_org).downcase) then
-               @sound.upfile = "ext_error"
-            elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
-                @sound.upfile = "file_error"
-            elsif file.size > Settings.size_sound.megabyte then
-                @sound.upfile = "size_error"
+        def check_upfiles(file, file_img, perms, perms_img)
+            if !file.nil?
+                file_org = file.original_filename
+                #↓downcaseメソッドは、文字列中の大文字を小文字に変えた新しい文字列を返す。
+                #↓.extname(filename)はファイル名 filename の拡張子部分(最後の "." に続く文字列)を 返す。
+                #↓include?メソッドは、文字列の中に引数の文字列が含まれるかどうかを調べる。
+                if !perms.include?(File.extname(file_org).downcase) then
+                   @sound.upfile = "ext_error"
+                elsif MimeMagic.by_magic(file) != "audio/mp3" && MimeMagic.by_magic(file) != "audio/mpeg" && MimeMagic.by_magic(file) != "audio/wav" && MimeMagic.by_magic(file) != "audio/x-wav" && MimeMagic.by_magic(file) != "audio/ogg" && MimeMagic.by_magic(file) != "video/ogg" then
+                    @sound.upfile = "file_error"
+                elsif file.size > Settings.size_sound.megabyte then
+                    @sound.upfile = "size_error"
+                end
+                #↑音声ファイルのチェック。
             end
-            #↑音声ファイルのチェック。
-            if !perms_img.include?(File.extname(file_org_img).downcase) then
-               @sound.image = "ext_error"
-            elsif MimeMagic.by_magic(file_img) != "image/jpg" && MimeMagic.by_magic(file_img) != "image/jpeg" && MimeMagic.by_magic(file_img) != "image/png" && MimeMagic.by_magic(file_img) != "image/x-citrix-png" && MimeMagic.by_magic(file_img) != "image/x-citrix-jpeg" && MimeMagic.by_magic(file_img) != "image/x-png" && MimeMagic.by_magic(file_img) != "image/pjpeg" then
-                @sound.image = "file_error"
-            elsif file_img.size > Settings.size_image.megabyte then
-                @sound.image = "size_error"
+            if !file_img.nil?
+                file_org_img = file_img.original_filename
+                if !perms_img.include?(File.extname(file_org_img).downcase) then
+                   @sound.image = "ext_error"
+                elsif MimeMagic.by_magic(file_img) != "image/jpg" && MimeMagic.by_magic(file_img) != "image/jpeg" && MimeMagic.by_magic(file_img) != "image/png" && MimeMagic.by_magic(file_img) != "image/x-citrix-png" && MimeMagic.by_magic(file_img) != "image/x-citrix-jpeg" && MimeMagic.by_magic(file_img) != "image/x-png" && MimeMagic.by_magic(file_img) != "image/pjpeg" then
+                    @sound.image = "file_error"
+                elsif file_img.size > Settings.size_image.megabyte then
+                    @sound.image = "size_error"
+                end
+                #↑サムネイルとなる画像ファイルのチェック。
             end
-            #↑サムネイルとなる画像ファイルのチェック。
         end
+
+        def update_upfiles
+            respond_to do |format|
+                if @sound.update(sound_params)
+                    format.html { redirect_to @sound, notice: '編集内容が更新されました。' }
+                    format.json { render :show, status: :ok, location: @sound }
+                else
+                    format.html { render :edit }
+                    format.json { render json: @sound.errors, status: :unprocessable_entity }
+                end
+            end
+        end
+
 end

@@ -51,29 +51,31 @@ class Sound < ActiveRecord::Base
     end
 
     def set_sound(file, file_id, use_for)
-       file_org_name = file.original_filename
-        #↑コントローラー側で定義されているfile_orgnameとは別物。
-        file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-        #file_name = SecureRandom.hex(10) + self.id.to_s
-        file_name = Settings.nhead_sound.to_s + file_id.to_s
-         full_file_name = file_name + File.extname(file_org_name).downcase
-        #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
-        #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
-        #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-        folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
-        #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-        if use_for == "new" then
+         if !file.nil?
+           file_org_name = file.original_filename
+            #↑コントローラー側で定義されているfile_orgnameとは別物。
+            file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
+            #file_name = SecureRandom.hex(10) + self.id.to_s
+            full_file_name = Settings.nhead_sound.to_s + file_id.to_s + File.extname(file_org_name).downcase
+            #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
+            #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
+            #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
+            folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
+            #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
+            File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
+            self.upfile = file_org_name
+            self.ext_name = File.extname(file_org_name).downcase
+            #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
         else
-            FileUtils.rm_rf(folder, :secure => true) rescue nil
-            FileUtils.mkdir_p(folder)
+            pre_file = "./public/uploads/sounds/" + file_id.to_s + "/sound" + Settings.nhead_sound.to_s + file_id.to_s + File.extname(self.upfile).downcase
+            new_folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
+            FileUtils.mkdir_p(new_folder)
+            FileUtils.cp(pre_file, new_folder)
         end
-        File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
-        self.upfile = file_org_name
-        self.ext_name = File.extname(file_org_name).downcase
-        #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
     end
     def set_image(file, file_id, use_for)
+         if !file.nil?
             org_img = file.read
             #↑read メソッドを呼ぶと，バイナリ（元のデータ、ここでは画像ファイル）が取得できる，一度呼ぶと取得できなくなる．
             #↑そのため、readで一度バイナリを取得したら何かの変数に入れておく。
@@ -95,16 +97,23 @@ class Sound < ActiveRecord::Base
             folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.rm_rf(folder, :secure => true) rescue nil
-            if use_for == "new" then
-                FileUtils.mkdir_p(folder)
-            else
-                FileUtils.rm_rf(folder, :secure => true) rescue nil
-                FileUtils.mkdir_p(folder)
-            end
+            FileUtils.mkdir_p(folder)
             File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }
             File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }
             self.image = file_org_name
             self.img_ext_name = File.extname(file_org_name).downcase
+        else
+            new_folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
+            pre_folder = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
+            FileUtils.mkdir_p(new_folder)
+            Dir.glob(pre_folder.to_s + "/*").each do|f|
+                pre_image_file = f
+               FileUtils.cp(pre_file, new_folder)
+            end
+            pre_image_file = "./public/uploads/sounds/" + file_id.to_s + "/sound" + Settings.nhead_sound.to_s + file_id.to_s + File.extname(self.image).downcase
+            
+            
+        end
     end
 
     private
