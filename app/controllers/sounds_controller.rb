@@ -96,6 +96,8 @@ class SoundsController < ApplicationController
             if !new_file.nil? then
                 sound_org_name = new_file.original_filename
                 sound_org_name = sound_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
+                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound"
+                FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
             else
                 pre_sound_file = "./public/uploads/sounds/" + @sound.path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
                 file = File.open(pre_sound_file, 'rb')
@@ -105,6 +107,8 @@ class SoundsController < ApplicationController
             if !img_new_file.nil? then
                 img_org_name = img_new_file.original_filename
                 img_org_name = img_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
+                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
+                FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
             else
                 pre_img_file = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
                 img_file = File.open(pre_img_file, 'rb')
@@ -128,11 +132,15 @@ class SoundsController < ApplicationController
             else
                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s
 
-               logger.debug "pre_path="
+               logger.debug "pre_path2="
                logger.debug(@sound.path.to_s)
 
                 #↓そして、編集後に新しく作り直す。
                 file_id = @sound.object_id
+
+               logger.debug "cur_path2="
+               logger.debug(file_id)
+
                @sound.upload_sound(file, file_id, sound_org_name, sound_change)
                @sound.upload_image(img_file, file_id, img_org_name, img_change)
                @sound.path = file_id
@@ -175,7 +183,7 @@ class SoundsController < ApplicationController
         else
             update_upfiles
         end
-        FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
+        #FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
     end
 
     # DELETE /sounds/1

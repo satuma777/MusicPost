@@ -72,8 +72,6 @@ class Sound < ActiveRecord::Base
             self.upfile = sound_org_name
             self.ext_name = File.extname(sound_org_name).downcase
             #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
-        else
-            render :new
         end
     end
 
@@ -109,8 +107,6 @@ class Sound < ActiveRecord::Base
             File.open("#{folder}/#{new_file_s_name}", 'wb') { |f| f.write(small_img) }
             self.image = img_org_name
             self.img_ext_name = File.extname(img_org_name).downcase
-        else
-            render :new
         end
     end
 
