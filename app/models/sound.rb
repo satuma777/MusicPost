@@ -29,7 +29,7 @@ class Sound < ActiveRecord::Base
             elsif upfile == "file_error" then
                  errors[:upfile] << "不正なファイル形式です。mp3、ogg、wavどれかのファイル形式にしてください。"
             elsif upfile == "size_error" then
-                errors[:upfile] << "ファイルサイズは" + Settings.size_sound.to_s + "MBまでです。"
+                errors[:upfile] << "ファイルサイズは" + Settings.SOUND_DATA_SIZE.to_s + "MBまでです。"
             end
         else
             errors[:upfile] <<"アップロードする音声ファイルを選択してください。"
@@ -43,76 +43,74 @@ class Sound < ActiveRecord::Base
             elsif image == "file_error" then
                  errors[:image] << "不正なファイル形式です。jpg、jpeg、gif、pngどれかのファイル形式にしてください。"
             elsif image == "size_error" then
-                errors[:image] << "ファイルサイズは" + Settings.size_image.to_s + "MBまでです。"
+                errors[:image] << "ファイルサイズは" + Settings.IMAGE_DATA_SIZE.to_s + "MBまでです。"
             end
         else
             errors[:image] <<"サムネイルを選択してください。"
         end
     end
 
-    def set_sound(file, file_id, use_for)
+    def upload_sound(file, file_id, sound_org_name, sound_change)
          if !file.nil?
-           file_org_name = file.original_filename
-            #↑コントローラー側で定義されているfile_orgnameとは別物。
-            file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
+
+            logger.debug "sound_@sound.path="
+            logger.debug(self.path)
+
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            full_file_name = Settings.nhead_sound.to_s + file_id.to_s + File.extname(file_org_name).downcase
+            new_file_name = Settings.SOUND_HEAD_NAME.to_s + file_id.to_s + File.extname(sound_org_name).downcase
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
             folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(folder)
-            File.open("#{folder}/#{ full_file_name}", 'wb') { |f| f.write(file.read) }
-            self.upfile = file_org_name
-            self.ext_name = File.extname(file_org_name).downcase
+
+            logger.debug "sound_cur_folder_path=" 
+            logger.debug(folder)
+
+            File.open("#{folder}/#{new_file_name}", 'wb') { |f| f.write(file.read) }
+            self.upfile = sound_org_name
+            self.ext_name = File.extname(sound_org_name).downcase
             #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
         else
-            pre_file = "./public/uploads/sounds/" + file_id.to_s + "/sound" + Settings.nhead_sound.to_s + file_id.to_s + File.extname(self.upfile).downcase
-            new_folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
-            FileUtils.mkdir_p(new_folder)
-            FileUtils.cp(pre_file, new_folder)
+            render :new
         end
     end
-    def set_image(file, file_id, use_for)
-         if !file.nil?
-            org_img = file.read
+
+    def upload_image(img_file, file_id, img_org_name, img_change)
+         logger.debug "img_@sound.path=" 
+         logger.debug(self.path)
+         if !img_file.nil?
+            logger.debug "img_@sound.path=" 
+            logger.debug(self.path)
+            org_img = img_file.read
             #↑read メソッドを呼ぶと，バイナリ（元のデータ、ここでは画像ファイル）が取得できる，一度呼ぶと取得できなくなる．
             #↑そのため、readで一度バイナリを取得したら何かの変数に入れておく。
             edit_img = Magick::Image.from_blob(org_img).shift
+            #↑rmagicにファイルを読み込ませる。
             normal_img = create_square_thumbnail(edit_img, 500).to_blob
             small_img = create_square_thumbnail(edit_img, 200).to_blob
 
-            file_org_name = file.original_filename
-            #↑コントローラー側で定義されているfile_orgnameとは別物。
-            file_org_name = file_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-            #file_name = SecureRandom.hex(10) + self.id.to_s
-            file_name = Settings.nhead_image.to_s + file_id.to_s
+            file_name = Settings.IMAGE_HEAD_NAME.to_s + file_id.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            file_s_name = file_name + Settings.image_s.to_s
-            full_file_name = file_name + File.extname(file_org_name).downcase
-            full_file_s_name = file_s_name + File.extname(file_org_name).downcase
+            file_s_name = file_name + Settings.SMALL.to_s
+            new_file_name = file_name + File.extname(img_org_name).downcase
+            new_file_s_name = file_s_name + File.extname(img_org_name).downcase
             folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-            FileUtils.rm_rf(folder, :secure => true) rescue nil
             FileUtils.mkdir_p(folder)
-            File.open("#{folder}/#{full_file_name}", 'wb') { |f| f.write(normal_img) }
-            File.open("#{folder}/#{full_file_s_name}", 'wb') { |f| f.write(small_img) }
-            self.image = file_org_name
-            self.img_ext_name = File.extname(file_org_name).downcase
+
+            logger.debug "img_cur_folder_path=" 
+            logger.debug(folder)
+
+            File.open("#{folder}/#{new_file_name}", 'wb') { |f| f.write(normal_img) }
+            File.open("#{folder}/#{new_file_s_name}", 'wb') { |f| f.write(small_img) }
+            self.image = img_org_name
+            self.img_ext_name = File.extname(img_org_name).downcase
         else
-            new_folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
-            pre_folder = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
-            FileUtils.mkdir_p(new_folder)
-            Dir.glob(pre_folder.to_s + "/*").each do|f|
-                pre_image_file = f
-               FileUtils.cp(pre_file, new_folder)
-            end
-            pre_image_file = "./public/uploads/sounds/" + file_id.to_s + "/sound" + Settings.nhead_sound.to_s + file_id.to_s + File.extname(self.image).downcase
-            
-            
+            render :new
         end
     end
 

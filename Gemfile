@@ -76,6 +76,8 @@ gem 'config'
 #gem 'libv8'
 #gem 'bootstrap-sass'
 
+gem 'rspec'
+
 
 
 
