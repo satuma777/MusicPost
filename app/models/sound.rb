@@ -50,61 +50,75 @@ class Sound < ActiveRecord::Base
         end
     end
 
-    def upload_sound(file, file_id, sound_org_name, sound_change)
-         if !file.nil?
+    def upload_sound(sound_file, files_id, sound_org_name, sound_change)
+         if !sound_file.nil?
 
+            #デバッグ
             logger.debug "sound_@sound.path="
             logger.debug(self.path)
+            #デバッグ
 
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            new_file_name = Settings.SOUND_HEAD_NAME.to_s + file_id.to_s + File.extname(sound_org_name).downcase
+            new_file_name = Settings.SOUND_HEAD_NAME.to_s + files_id.to_s + File.extname(sound_org_name).downcase
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            folder = "./public/uploads/sounds/" + file_id.to_s + "/sound"
+            new_folder = "./public/uploads/sounds/" + files_id.to_s + "/sound"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-            FileUtils.mkdir_p(folder)
+            FileUtils.mkdir_p(new_folder)
 
+            #デバッグ
             logger.debug "sound_cur_folder_path=" 
-            logger.debug(folder)
+            logger.debug(new_folder)
+            #デバッグ
 
-            File.open("#{folder}/#{new_file_name}", 'wb') { |f| f.write(file.read) }
+            File.open("#{new_folder}/#{new_file_name}", 'wb') { |f| f.write(sound_file.read) }
             self.upfile = sound_org_name
             self.ext_name = File.extname(sound_org_name).downcase
             #↑HTMLでの再生の際は、pathとext_nameを組み合わせて、～.mp3のような名前にし、再生できる形にする。
         end
     end
 
-    def upload_image(img_file, file_id, img_org_name, img_change)
+    def upload_image(img_file, files_id, img_org_name, img_change)
+
+         #デバッグ
          logger.debug "img_@sound.path=" 
          logger.debug(self.path)
+         #デバッグ
+
          if !img_file.nil?
+
+            #デバッグ
             logger.debug "img_@sound.path=" 
             logger.debug(self.path)
+            #デバッグ
+
             org_img = img_file.read
             #↑read メソッドを呼ぶと，バイナリ（元のデータ、ここでは画像ファイル）が取得できる，一度呼ぶと取得できなくなる．
             #↑そのため、readで一度バイナリを取得したら何かの変数に入れておく。
             edit_img = Magick::Image.from_blob(org_img).shift
             #↑rmagicにファイルを読み込ませる。
-            normal_img = create_square_thumbnail(edit_img, 500).to_blob
-            small_img = create_square_thumbnail(edit_img, 200).to_blob
+            normal_img = create_square_thumbnail(edit_img, Settings.NORMAL_IMAGE_SIZE).to_blob
+            small_img = create_square_thumbnail(edit_img, Settings.SMALL_IMAGE_SIZE).to_blob
 
-            file_name = Settings.IMAGE_HEAD_NAME.to_s + file_id.to_s
+            file_name = Settings.IMAGE_HEAD_NAME.to_s + files_id.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            file_s_name = file_name + Settings.SMALL.to_s
             new_file_name = file_name + File.extname(img_org_name).downcase
-            new_file_s_name = file_s_name + File.extname(img_org_name).downcase
-            folder = "./public/uploads/sounds/" + file_id.to_s + "/thumbnail"
+            new_file_s_name = file_name + Settings.SMALL.to_s + File.extname(img_org_name).downcase
+
+            new_folder = "./public/uploads/sounds/" + files_id.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
-            FileUtils.mkdir_p(folder)
+            FileUtils.mkdir_p(new_folder)
 
+            #デバッグ
             logger.debug "img_cur_folder_path=" 
-            logger.debug(folder)
+            logger.debug(new_folder)
+            #デバッグ
 
-            File.open("#{folder}/#{new_file_name}", 'wb') { |f| f.write(normal_img) }
-            File.open("#{folder}/#{new_file_s_name}", 'wb') { |f| f.write(small_img) }
+            File.open("#{new_folder}/#{new_file_name}", 'wb') { |f| f.write(normal_img) }
+            File.open("#{new_folder}/#{new_file_s_name}", 'wb') { |f| f.write(small_img) }
             self.image = img_org_name
             self.img_ext_name = File.extname(img_org_name).downcase
         end

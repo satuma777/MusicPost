@@ -42,27 +42,27 @@ class SoundsController < ApplicationController
         #↑ファイル選択画面での注釈。大文字のスネークケース文字には、定数が代入されている。
         sound_change = true;
         img_change = true;
-        file = params[:sound][:upfile]
+        sound_file = params[:sound][:upfile]
         img_file = params[:sound][:image]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
-        perms = ['.mp3', '.ogg', '.wav']
+        sound_perms = ['.mp3', '.ogg', '.wav']
         img_perms = ['.jpg', '.jpeg', '.gif', '.png']
-        if !file.nil? && !img_file.nil? then
-            sound_org_name = file.original_filename
+        if !sound_file.nil? && !img_file.nil? then
+            sound_org_name = sound_file.original_filename
             sound_org_name = sound_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
             img_org_name = img_file.original_filename
             img_org_name = img_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
 
-            check_upfiles(file, img_file, perms, img_perms, sound_org_name, img_org_name)
+            check_upfiles(sound_file, img_file, sound_perms, img_perms, sound_org_name, img_org_name)
             #↑サムネイルとなる画像ファイルのチェック。
             unless @sound.valid? then
                 render :new
             else
-                file_id = @sound.object_id
-               @sound.upload_sound(file, file_id, sound_org_name, sound_change)
-               @sound.upload_image(img_file, file_id, img_org_name, img_change)
-               @sound.path = file_id
+                files_id = @sound.object_id
+               @sound.upload_sound(sound_file, files_id, sound_org_name, sound_change)
+               @sound.upload_image(img_file, files_id, img_org_name, img_change)
+               @sound.path = files_id
                 if @sound.save then
                     redirect_to @sound, notice: "#{@sound.upfile.toutf8}をアップロードしました。"
                     #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
@@ -84,47 +84,51 @@ class SoundsController < ApplicationController
         @sound_value = Settings.EDIT_SOUND_VALUE
         @thumb_value = Settings.EDIT_THUMB_VALUE
         #↑ファイル選択画面での注釈。大文字のスネークケース文字には、定数が代入されている。
-        sound_change = true;
-        img_change = true;
-        new_file = params[:sound][:upfile]
-        img_new_file = params[:sound][:image]
+        sound_change = true
+        img_change = true
+        sound_file = params[:sound][:upfile]
+        img_file = params[:sound][:image]
         #↑params[:upfile]でもよい。params[:sound]とparamsは同じ見てよい。
         #↑その他の値、例えばidを取ってきたい時は、id = params[:sound][:id]（または、id = params[:id]）とする。
-        perms = ['.mp3', '.ogg', '.wav']
+        sound_perms = ['.mp3', '.ogg', '.wav']
         img_perms = ['.jpg', '.jpeg', '.gif', '.png']
-        if !new_file.nil? || !img_new_file.nil?
-            if !new_file.nil? then
-                sound_org_name = new_file.original_filename
+        if !sound_file.nil? || !img_file.nil?
+            if !sound_file.nil? then
+                sound_org_name = sound_file.original_filename
                 sound_org_name = sound_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound"
-                FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
+                sound_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound"
+                FileUtils.rm_rf(sound_pre_path, :secure => true) rescue nil
             else
-                pre_sound_file = "./public/uploads/sounds/" + @sound.path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
-                file = File.open(pre_sound_file, 'rb')
+                sound_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
+                sound_file = File.open(sound_pre_path, 'rb')
                 sound_org_name = Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
                 sound_change = false
             end
-            if !img_new_file.nil? then
-                img_org_name = img_new_file.original_filename
+            if !img_file.nil? then
+                img_org_name = img_file.original_filename
                 img_org_name = img_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
-                FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
+                img_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
+                FileUtils.rm_rf(img_pre_path, :secure => true) rescue nil
             else
                 pre_img_file = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
                 img_file = File.open(pre_img_file, 'rb')
                 img_org_name = Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s + @sound.img_ext_name.to_s
                 img_change = false
             end
+
+            #デバッグ
             logger.debug "upfile=" 
-            logger.debug(new_file)
+            logger.debug(sound_file)
             logger.debug(sound_org_name)
             logger.debug(@sound.upfile)
             logger.debug "img=" 
-            logger.debug(img_new_file)
+            logger.debug(img_file)
             logger.debug(img_org_name)
             logger.debug(@sound.image)
-            #↑new_fileかimg_new_fileどちらかが空であれば、空のほうに編集前のファイルを入れる。
-            check_upfiles(file, img_file, perms, img_perms, sound_org_name, img_org_name)
+            #デバッグ
+
+            #↑fileかimg_fileどちらかが空であれば、空のほうに編集前のファイルを入れる。
+            check_upfiles(sound_file, img_file, sound_perms, img_perms, sound_org_name, img_org_name)
             #↑アップロードしたファイルのチェックを行う。
             unless @sound.valid?
             #↑アップロードしたファイルのバリデーションチェックを行う。
@@ -132,31 +136,38 @@ class SoundsController < ApplicationController
             else
                upfolder_path = "./public/uploads/sounds/" + @sound.path.to_s
 
+               #デバッグ
                logger.debug "pre_path2="
                logger.debug(@sound.path.to_s)
+               #デバッグ
 
                 #↓そして、編集後に新しく作り直す。
-                file_id = @sound.object_id
+               files_id = @sound.object_id
 
+                #デバッグ
                logger.debug "cur_path2="
-               logger.debug(file_id)
+               logger.debug(files_id)
+               #デバッグ
 
-               @sound.upload_sound(file, file_id, sound_org_name, sound_change)
-               @sound.upload_image(img_file, file_id, img_org_name, img_change)
-               @sound.path = file_id
+               @sound.upload_sound(sound_file, files_id, sound_org_name, sound_change)
+               @sound.upload_image(img_file, files_id, img_org_name, img_change)
+               @sound.path = files_id
 
+               #デバッグ
                logger.debug "sound_change="
                logger.debug(sound_change.to_s)
                logger.debug "img_change="
                logger.debug(img_change.to_s)
-
+               #デバッグ
+               
                if !sound_change
-                   file.close
-               end
-               if !img_change
+                   sound_file.close
+              elsif !img_change
                    img_file.close
-               end
+              end
                #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
+               
+               #デバッグ
                pre_folder_exist = File.exists?(upfolder_path.to_s)
                pre_file_exist = File.exists?(upfolder_path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s)
                logger.debug "pre_folder_exist?="
@@ -167,16 +178,19 @@ class SoundsController < ApplicationController
                logger.debug(@sound.path.to_s)
                logger.debug "up_folder="
                logger.debug(upfolder_path.to_s)
+               #デバッグ
 
                FileUtils.rm_rf(upfolder_path, :secure => true) rescue nil
                #↑編集前のデータをフォルダごと消去する。
                
+               #デバッグ
                logger.debug "pre_folder_exist?="
                logger.debug(pre_folder_exist.to_s)
                logger.debug "pre_file_exist?="
                logger.debug(pre_folder_exist.to_s)
                logger.debug "cur_path="
                logger.debug(@sound.path.to_s)
+               #デバッグ
 
                update_upfiles
             end
