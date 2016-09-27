@@ -23,7 +23,7 @@ class Sound < ActiveRecord::Base
     end
 
     def upfile_check
-        if upfile != nil
+        if upfile != ""
             if upfile == "ext_error" then
                 errors[:upfile] << "アップロードできるのは、mp3、ogg、wavのみです。"
             elsif upfile == "file_error" then
@@ -37,7 +37,7 @@ class Sound < ActiveRecord::Base
     end
 
     def image_check
-        if image != nil
+        if image != ""
             if image == "ext_error" then
                 errors[:image] << "アップロードできるのは、jpg、jpeg、gif、pngのみです。"
             elsif image == "file_error" then
@@ -50,7 +50,7 @@ class Sound < ActiveRecord::Base
         end
     end
 
-    def upload_sound(sound_file, files_id, sound_org_name, sound_change)
+    def upload_sound(sound_file, files_id, sound_org_name)
          if !sound_file.nil?
 
             #デバッグ
@@ -79,7 +79,7 @@ class Sound < ActiveRecord::Base
         end
     end
 
-    def upload_image(img_file, files_id, img_org_name, img_change)
+    def upload_image(img_file, files_id, img_org_name)
 
          #デバッグ
          logger.debug "img_@sound.path=" 
