@@ -151,7 +151,7 @@ class SoundsController < ApplicationController
 
                @sound.upload_sound(sound_file, files_id, sound_org_name, sound_change)
                @sound.upload_image(img_file, files_id, img_org_name, img_change)
-               @sound.path = files_id
+               
 
                #デバッグ
                logger.debug "sound_change="
@@ -160,13 +160,19 @@ class SoundsController < ApplicationController
                logger.debug(img_change.to_s)
                #デバッグ
                
-               if !sound_change
+
                    sound_file.close
-              elsif !img_change
+                   sound_pre_path = upfolder_path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
+                   FileUtils.rm_rf(sound_pre_path, :secure => true) rescue nil
+
                    img_file.close
-              end
+                   img_pre_path = upfolder_path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
+                    FileUtils.rm_rf(img_pre_path, :secure => true) rescue nil
+
                #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
                
+               @sound.path = files_id
+
                #デバッグ
                pre_folder_exist = File.exists?(upfolder_path.to_s)
                pre_file_exist = File.exists?(upfolder_path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s)
