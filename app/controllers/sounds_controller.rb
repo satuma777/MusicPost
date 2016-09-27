@@ -58,10 +58,9 @@ class SoundsController < ApplicationController
             unless @sound.valid? then
                 render :new
             else
-                files_id = @sound.object_id
-               @sound.upload_sound(sound_file, files_id, sound_org_name)
-               @sound.upload_image(img_file, files_id, img_org_name)
-               @sound.path = files_id
+               @sound.path = @sound.object_id
+               @sound.upload_sound(sound_file, sound_org_name)
+               @sound.upload_image(img_file, img_org_name)
                 if @sound.save then
                     redirect_to @sound, notice: "#{@sound.upfile.toutf8}をアップロードしました。"
                     #↑redirect_to sound_path(@sound.id)→redirect_to sound_path(@sound.id)→redirect_to @sound
@@ -109,16 +108,7 @@ class SoundsController < ApplicationController
             #↑アップロードしたファイルのバリデーションチェックを行う。
                 render :edit
             else
-                files_id = @sound.path
-
-                #デバッグ
-               logger.debug "pre_path2="
-               logger.debug(@sound.path.to_s)
-               logger.debug "cur_path2="
-               logger.debug(files_id)
-               #デバッグ
-
-               @sound.upload_image(img_file, files_id, img_org_name)
+               @sound.upload_image(img_file, img_org_name)
 
                update_upfiles
             end

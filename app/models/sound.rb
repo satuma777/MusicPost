@@ -50,7 +50,7 @@ class Sound < ActiveRecord::Base
         end
     end
 
-    def upload_sound(sound_file, files_id, sound_org_name)
+    def upload_sound(sound_file, sound_org_name)
          if !sound_file.nil?
 
             #デバッグ
@@ -59,11 +59,11 @@ class Sound < ActiveRecord::Base
             #デバッグ
 
             #file_name = SecureRandom.hex(10) + self.id.to_s
-            new_file_name = Settings.SOUND_HEAD_NAME.to_s + files_id.to_s + File.extname(sound_org_name).downcase
+            new_file_name = Settings.SOUND_HEAD_NAME.to_s + self.path.to_s + File.extname(sound_org_name).downcase
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
-            new_folder = "./public/uploads/sounds/" + files_id.to_s + "/sound"
+            new_folder = "./public/uploads/sounds/" + self.path.to_s + "/sound"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(new_folder)
 
@@ -79,7 +79,7 @@ class Sound < ActiveRecord::Base
         end
     end
 
-    def upload_image(img_file, files_id, img_org_name)
+    def upload_image(img_file, img_org_name)
 
          #デバッグ
          logger.debug "img_@sound.path=" 
@@ -101,19 +101,19 @@ class Sound < ActiveRecord::Base
             normal_img = create_square_thumbnail(edit_img, Settings.NORMAL_IMAGE_SIZE).to_blob
             small_img = create_square_thumbnail(edit_img, Settings.SMALL_IMAGE_SIZE).to_blob
 
-            file_name = Settings.IMAGE_HEAD_NAME.to_s + files_id.to_s
+            file_name = Settings.IMAGE_HEAD_NAME.to_s + self.path.to_s
             #↑idを取得するときは、.idではなく、.object_idと書く。to_sで文字列（string型）に直している。
             #↑.object_idは各オブジェクトに対して一意な整数を返す。オブジェクトとは、インスタンスもクラスも含めた一つ一つのものである。
             #↑インスタンスもオブジェクトなので、オブジェクト1つ1つに対しても一意なidが返される。
             new_file_name = file_name + File.extname(img_org_name).downcase
             new_file_s_name = file_name + Settings.SMALL.to_s + File.extname(img_org_name).downcase
 
-            new_folder = "./public/uploads/sounds/" + files_id.to_s + "/thumbnail"
+            new_folder = "./public/uploads/sounds/" + self.path.to_s + "/thumbnail"
             #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
             FileUtils.mkdir_p(new_folder)
 
             #デバッグ
-            logger.debug "img_cur_folder_path=" 
+            logger.debug "img_cur_folder_path="
             logger.debug(new_folder)
             #デバッグ
 
