@@ -1,7 +1,7 @@
 <h1>投稿した音楽を編集する</h1>
 
 <%= image_for(@sound, Settings.SHOW_IMAGE_SIZE) %>
-<%= render 'form' %>
+<%= render 'form_edit' %>
 
 <%= link_to '詳細', @sound %> |
 <%= link_to '戻る', sounds_path %>

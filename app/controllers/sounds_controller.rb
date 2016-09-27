@@ -31,6 +31,7 @@ class SoundsController < ApplicationController
     def edit
         @sound_value = Settings.EDIT_SOUND_VALUE
         @thumb_value = Settings.NEW_THUMB_VALUE
+        
     end
 
     # POST /sounds
@@ -96,8 +97,9 @@ class SoundsController < ApplicationController
             if !sound_file.nil? then
                 sound_org_name = sound_file.original_filename
                 sound_org_name = sound_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                sound_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound"
-                FileUtils.rm_rf(sound_pre_path, :secure => true) rescue nil
+                sound_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
+                sound_pre_file = File.open(sound_pre_path, 'rb')
+                sound_pre_name = Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
             else
                 sound_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
                 sound_file = File.open(sound_pre_path, 'rb')
@@ -107,11 +109,12 @@ class SoundsController < ApplicationController
             if !img_file.nil? then
                 img_org_name = img_file.original_filename
                 img_org_name = img_org_name.kconv(Kconv::SJIS, Kconv::UTF8)
-                img_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail"
-                FileUtils.rm_rf(img_pre_path, :secure => true) rescue nil
+                img_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
+                img_pre_file = File.open(img_pre_path, 'rb')
+                img_pre_name = Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s + @sound.img_ext_name.to_s
             else
-                pre_img_file = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
-                img_file = File.open(pre_img_file, 'rb')
+                img_pre_path = "./public/uploads/sounds/" + @sound.path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
+                img_file = File.open(img_pre_path, 'rb')
                 img_org_name = Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s + @sound.img_ext_name.to_s
                 img_change = false
             end
@@ -162,11 +165,12 @@ class SoundsController < ApplicationController
                
 
                    sound_file.close
-                   sound_pre_path = upfolder_path.to_s + "/sound/" + Settings.SOUND_HEAD_NAME.to_s + @sound.path.to_s + @sound.ext_name.to_s
+                   sound_pre_file.close
+                   sound_pre_path = upfolder_path.to_s + "/sound/"
                    FileUtils.rm_rf(sound_pre_path, :secure => true) rescue nil
 
                    img_file.close
-                   img_pre_path = upfolder_path.to_s + "/thumbnail/" + Settings.IMAGE_HEAD_NAME.to_s + @sound.path.to_s  + @sound.img_ext_name.to_s
+                   img_pre_path = upfolder_path.to_s + "/thumbnail/"
                     FileUtils.rm_rf(img_pre_path, :secure => true) rescue nil
 
                #↑通常、一番前の"."（ドット）はいらないが、"FileUtils"を使う時は必要。
