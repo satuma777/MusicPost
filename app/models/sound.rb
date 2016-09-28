@@ -4,13 +4,16 @@ class Sound < ActiveRecord::Base
     require 'RMagick'
     require "fileutils"
 
+    belongs_to :user
+    #↑単数形で書く。
+
     validate :upfile_check
     validate :image_check
 
     validates :title, presence: true
     validates :content, presence: true
 
-    validates :user_id, presence: true
+    #validates :user_id, presence: true
 
     def upfile_check
         if upfile != ""

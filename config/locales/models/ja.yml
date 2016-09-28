@@ -1,16 +1,15 @@
 ja:
-  activerecode:
+  activerecord:
     models:
       sound: "音楽"
       user: "ユーザー"
     attributes:
       sound:
         title: "タイトル"
-        content: "説明"
-        upfile: "音楽"
-        image: "サムネイル"
+        content: "音楽の説明"
+        upfile: ""
+        image: ""
       user:
         name: "名前"
         email: "メールアドレス"
         content: "自己紹介"
-#↑インデントには気をつける。スペースかタブか違うだけでもエラーとなる。
