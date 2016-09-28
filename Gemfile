@@ -76,8 +76,23 @@ gem 'config'
 #gem 'libv8'
 #gem 'bootstrap-sass'
 
-gem 'rspec'
+gem "sprockets"
 
+group :development, :test do
+    gem 'rspec'
 
+    gem 'pry-rails'
+    gem 'pry-byebug'
+
+    #gem 'hirb'
+    #gem 'hirb-unicode'
+
+    #gem 'better-errors'
+    #gem 'binding_of_caller'
+
+    #gem 'rails-erb'
+    
+    gem 'meta_request'
+end
 
 
