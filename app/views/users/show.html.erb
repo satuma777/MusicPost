@@ -1,4 +1,31 @@
 <h1>マイページ</h1>
+
+<p id="notice" class="alert alert-success"><%= notice %></p>
+
+<aside class="sidebar">
+  <section>
+    <span class="label">ユーザー</span>
+    <h3 class="user-info"><%= @user.name %></h3>
+  </section>
+  
+  <section>
+    <span class="label">メールアドレス</span>
+    <h3 class="user-info"><%= @user.email %></h3>
+  </section>
+
+  <section>
+    <small><%= link_to 'プロフィールを編集', edit_user_path(@user) %></small>
+  </section>
+
+</aside>
+
+<ul class="sounds">
+  <!-- ここで@notesに対してeachメソッドを用いてください -->
+  <% @sounds.each do |sound|%>
+    <li><%= link_to sound.title, sound %></li>
+  <% end %>
+</ul>
+
 <h2>
     機能
 </h2>
@@ -22,3 +49,5 @@
     <li><a href="">マイリスト作者のマイページ</a></li>
     <li><a href="">オススメユーザーのマイページ</a></li>
 </ol>
+
+

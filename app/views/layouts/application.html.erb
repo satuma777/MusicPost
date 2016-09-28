@@ -4,14 +4,14 @@
     <meta charset=utf-8>
     <meta name=viewport content="width=device-width, initial-scale=1">
     <title>MusicPost</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %> 
     <!-- ↑app/assets/stylesheets内の全CSSファイルを読み込んでいる-->
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <!-- ↑app/assets/javascripts内の全javascriptファイルを読み込んでいる-->
     <%= csrf_meta_tags %>
     <!-- ↑セキュリティのためのタグ-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
     <header class="navbar">
@@ -19,8 +19,7 @@
         <div class="navbar-header" >
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
         <div id="logo" class = "navbar-brand"><%= link_to "MusicPost", root_path %></div>
-        <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav header-right">
+        <ul class="header-right">
             <li class="active"><%= link_to "ホーム", root_path %></li>
             <li><%= link_to "マッチング", home_matching_top_path %></li>
             <li><%= link_to "メロディー閲覧", show_melody_sounds_path %></li>
@@ -28,14 +27,14 @@
             <li><%= link_to "有料会員登録" ,new_user_path %></li>
             <li><%= link_to "ログイン" %></li> 
             <!-- ↑ログインしている特はログアウトに変わる-->
-            <li><%= link_to "マイページ" ,users_path %></li> 
+            <li><%= link_to "マイページ" ,@user %></li> 
+            <li><%= link_to "ユーザーリスト" ,users_path %></li> 
             <li><%= link_to "音楽投稿" ,new_sound_path %></li>
             <li><%= link_to "ランキング" ,sounds_path %></li>
             <li><%= link_to "オススメ音楽" ,recommend_sounds_path %></li>
             <li><%= link_to "オススメユーザー" ,recommend_users_path %></li>
             <li><%= link_to "お知らせ" ,alert_path %></li>
         </ul>
-        </div>
         </div>
     </header>
     <div class="container">

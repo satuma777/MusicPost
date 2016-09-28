@@ -7,20 +7,10 @@ class Sound < ActiveRecord::Base
     validate :upfile_check
     validate :image_check
 
-    validate :title_check
-    validate :content_check
+    validates :title, presence: true
+    validates :content, presence: true
 
-    def title_check
-        if title.empty?
-            errors.add(:title, "タイトルを入力してください。")
-        end
-    end
-
-    def content_check
-        if content.empty?
-            errors.add(:content, "音楽の説明を入力してください。")
-        end
-    end
+    validates :user_id, presence: true
 
     def upfile_check
         if upfile != ""

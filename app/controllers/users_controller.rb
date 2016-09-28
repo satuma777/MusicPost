@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     end
 
     def show
+        @sounds = Sound.where(user_id:@user.id)
     end
 
     def new

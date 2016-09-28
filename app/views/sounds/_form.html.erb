@@ -13,6 +13,8 @@
     <% end %>
 
     <br>
+    
+
 
     <p>
     <div>
@@ -34,6 +36,8 @@
 =end
 %>
     </p>
+
+    <% if @use_for == "new" %>
     <p>
     <div>
     <lavel class: "control-label"><%= @sound_value %>
@@ -42,6 +46,8 @@
         <!--f.file_field(プロパティ名 [, オプション])  :size  フォームの幅-->
     </lavel>
     </p>
+    <% end %>
+
     <p>
     <div>
     <lavel class: "control-label"><%= @thumb_value %>

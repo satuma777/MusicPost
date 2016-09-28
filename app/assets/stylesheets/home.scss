@@ -1,11 +1,12 @@
 /* 共通レイアウト ================================ */
 body {
-  padding-top: 0px;
+  padding-top: 65px;
   color: #364a4d;
 }
 
 .header-right {
   list-style-type: none;
+  padding: 0px 15px 5px 0px;
 }
 
 a {
@@ -80,7 +81,7 @@ p {
 
 .header-right li {
   line-height: 65px;
-  padding: 0 5px;
+  padding: 0 3px;
   float: left;
   color: white;
 }

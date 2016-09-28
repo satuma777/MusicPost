@@ -22,6 +22,7 @@ class SoundsController < ApplicationController
     end
 
     def new
+        @use_for = "new"
         @sound_value = Settings.NEW_SOUND_VALUE
         @thumb_value = Settings.NEW_THUMB_VALUE
         @sound = Sound.new
@@ -35,6 +36,7 @@ class SoundsController < ApplicationController
     # POST /sounds
     # POST /sounds.json
     def create
+        @use_for = "new"
         @sound = Sound.new(sound_params)
         @sound_value = Settings.NEW_SOUND_VALUE
         @thumb_value = Settings.NEW_THUMB_VALUE
@@ -156,7 +158,7 @@ class SoundsController < ApplicationController
 
         # Never trust parameters from the scary internet, only allow the white list through.
         def sound_params
-            params.require(:sound).permit(:title, :content)
+            params.require(:sound).permit(:title, :content, :user_id)
         end
 
         def check_sound(sound_file, sound_perms, sound_org_name)

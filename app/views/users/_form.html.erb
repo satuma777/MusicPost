@@ -1,25 +1,37 @@
 <%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <% if @user.errors.any? %>
+        <div class="alert alert-danger">
+            <p><%= @user.errors.count %>件のエラーがあります。</p>
 
-      <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+            <ul>
+                <% @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    名前
+    <%= f.text_field :name, class: "form-control name-field" %>
+
+    メールアドレス
+    <%= f.text_field :email, class: "form-control email-field" %>
+    
+    <br>
+
+    <%= f.submit '保存', class: "btn primary-btn" %>
+
+    <br>
+    
+    <div class="field">
+        <%= f.label :name %><br>
+        <%= f.text_field :name %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="field">
+        <%= f.label :email %><br>
+        <%= f.text_field :email %>
+    </div>
+    <div class="actions">
+        <%= f.submit %>
+    </div>
 <% end %>
