@@ -1,8 +1,15 @@
+<%
+=begin
+%>
 <div>
     <span class="user-name">
         <%= sound.user.name %>
     </span>
 </div>
+<%
+=end
+%>
+
 <tr>
         <td><%= link_to  image_for(sound, Settings.INDEX_IMAGE_SIZE), sound_path(sound.id) %></td>
         <td><%= link_to sound.title, sound_path(sound.id) %></td>
