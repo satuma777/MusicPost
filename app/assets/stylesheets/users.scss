@@ -1,3 +1,54 @@
-// Place all the styles related to the Users controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+/* 新規ユーザー作成フォーム ================================ */
+.name-field, .email-field {
+  width: 45%;
+}
+
+/* ユーザー一覧 ================================ */
+.add-user-btn {
+  background-color: #239b76;
+  margin-top: 16px;
+  float: right
+}
+
+.add-user-btn:hover {
+  background-color: #28b086;
+  color: white;
+  text-decoration: none;
+}
+
+.user-list li {
+  overflow: auto;
+  padding: 10px 0;
+  margin-left: 5%;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.user-list img {
+  display: inline-block;
+  padding: 5px 0;
+  margin-right: 2%;
+  float: left;
+  width: 56px;
+}
+
+.user-list a {
+  display: inline-block;
+  margin-top: 22px;
+}
+
+
+/* ユーザーのshowページ ================================ */
+.sidebar { 
+  width: 34%;
+  float: left;
+  margin-bottom: 30px;
+  margin-right: 10%;
+}
+
+.label {
+  color: #C0C0C2;
+}
+
+.user-info {
+  margin: 10px 0 30px 0;
+}

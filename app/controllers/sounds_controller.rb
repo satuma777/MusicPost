@@ -6,6 +6,7 @@ class SoundsController < ApplicationController
     require 'RMagick'
     require "fileutils"
 
+    before_action :authenticate_user!
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
 
     def index

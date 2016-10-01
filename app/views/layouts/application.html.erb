@@ -4,8 +4,7 @@
     <meta charset=utf-8>
     <meta name=viewport content="width=device-width, initial-scale=1">
     <title>MusicPost</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %> 
     <!-- ↑app/assets/stylesheets内の全CSSファイルを読み込んでいる-->
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -15,18 +14,21 @@
 </head>
 <body>
     <header class="navbar">
-    <div class="container">
-        <div class="navbar-header" >
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <div id="logo" class = "navbar-brand"><%= link_to "MusicPost", root_path %></div>
+    <div class="header-container">
+        <div id="logo"><%= link_to "MusicPost", root_path %></div>
         <ul class="header-right">
-            <li class="active"><%= link_to "ホーム", root_path %></li>
+            <li><%= link_to "ホーム", root_path %></li>
             <li><%= link_to "マッチング", home_matching_top_path %></li>
             <li><%= link_to "メロディー閲覧", show_melody_sounds_path %></li>
             <li><%= link_to "音楽レッスン", home_lesson_top_path %></li>
             <li><%= link_to "有料会員登録" ,new_user_path %></li>
-            <li><%= link_to "ログイン" %></li> 
-            <!-- ↑ログインしている特はログアウトに変わる-->
+            <% if user_signed_in? %>
+                <li>ログインしています</li>
+            <% end %>
+            <% if !user_signed_in? %>
+                <li><%= link_to "ログイン" %></li> 
+                <!-- ↑ログインしている特はログアウトに変わる-->
+            <% end %>
             <li><%= link_to "マイページ" ,@user %></li> 
             <li><%= link_to "ユーザーリスト" ,users_path %></li> 
             <li><%= link_to "音楽投稿" ,new_sound_path %></li>
@@ -37,8 +39,24 @@
         </ul>
         </div>
     </header>
+
     <div class="container">
-            <%= yield %>
+        <% if flash[:notice].present? %>
+            <p class="alert alert-success">
+                <!-- ここでnoticeを表示してください -->
+                <%= notice %>
+            </p>
+        <% end %>
+        <% if flash[:alert].present? %>
+            <p class="alert alert-danger">
+              <!-- ここでalertを表示してください -->
+                <%= alert %>
+            </p>
+        <% end %>
+
+        <%= yield %>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

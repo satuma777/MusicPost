@@ -76,7 +76,14 @@ gem 'config'
 #gem 'libv8'
 #gem 'bootstrap-sass'
 
-gem "sprockets"
+gem 'sprockets'
+
+gem 'bootstrap-sass'
+
+gem 'devise'
+gem 'devise-bootstrap-views'
+gem 'devise-i18n'
+gem 'devise-i18n-views'
 
 group :development, :test do
     gem 'rspec'
