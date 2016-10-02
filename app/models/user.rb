@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable, :registerable,
-          :validatable
+            :recoverable, :rememberable, :trackable
     has_many :sounds
     #↑複数形で書く。
 
@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
     #validates :email, presence:true,niqueness:true
     #↑ deviseのvalidatableによって以下と同じバリデーションが設定されているのでコメントアウトする
     
+    devise :validatable
+
     def leave
         #leave_atに退会時刻を追記
         update_attribute(:leave_at, Time.current)

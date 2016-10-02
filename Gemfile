@@ -87,6 +87,8 @@ gem 'devise-i18n-views'
 
 gem 'bcrypt-ruby', '~> 3.1.0', require: 'bcrypt'
 
+gem "paranoia"
+
 group :development, :test do
     gem 'rspec'
 
