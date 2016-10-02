@@ -3,6 +3,7 @@ ja:
     attributes:
       user:
         current_password: "現在のパスワード"
+        name: "名前"
         email: "メールアドレス"
         password: "パスワード"
         password_confirmation: "確認用パスワード"
@@ -53,6 +54,8 @@ ja:
     sessions:
       new:
         sign_in: "ログイン"
+        sign_up: "新規登録"
+        remember_me: "パスワードを記憶する"
     shared:
       links:
         back: "戻る"

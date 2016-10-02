@@ -21,15 +21,12 @@
             <li><%= link_to "マッチング", home_matching_top_path %></li>
             <li><%= link_to "メロディー閲覧", show_melody_sounds_path %></li>
             <li><%= link_to "音楽レッスン", home_lesson_top_path %></li>
-            <li><%= link_to "有料会員登録" ,new_user_path %></li>
             <% if user_signed_in? %>
-                <li>ログインしています</li>
-            <% end %>
-            <% if !user_signed_in? %>
-                <li><%= link_to "ログイン" %></li> 
-                <!-- ↑ログインしている特はログアウトに変わる-->
-            <% end %>
-            <li><%= link_to "マイページ" ,@user %></li> 
+                    <li><%= link_to current_user.email, current_user %></li>
+                    <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+            <% else %>
+                    <li><%= link_to "ログイン/新規登録", new_user_session_path %></li>
+          <% end %>
             <li><%= link_to "ユーザーリスト" ,users_path %></li> 
             <li><%= link_to "音楽投稿" ,new_sound_path %></li>
             <li><%= link_to "ランキング" ,sounds_path %></li>
