@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+    devise_for :users
     resources :sounds do
         collection do
             get :show_melody
