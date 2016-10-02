@@ -6,7 +6,7 @@ Rails.application.routes.draw do
             get :index_recommend, as: 'recommend'
         end
     end
-    resources :users do
+    resources :users, only:[:index, :show, :edit, :update] do
         collection do
             get :index_recommend, as: 'recommend'
         end
