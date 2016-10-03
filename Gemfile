@@ -51,7 +51,7 @@ gem 'coffee-script-source', '1.8.0'
 #gem 'carrierwave'
 #↑アップロードを機能を付与するgem
 
-#gem 'ruby-filemagic'
+#gem 'ruby-filemagic', '~> 0.7.0'
 #↑carrierwave-magicで必要なgem
 
 #gem 'carrierwave-magic'
