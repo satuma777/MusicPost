@@ -29,6 +29,18 @@ class UsersController < ApplicationController
         end
     end
 
+    def all_destroy
+        @users = User.all
+        @users.each do |user|
+            user.destroy
+            leave
+        end
+        respond_to do |format|
+            format.html { redirect_to users_path, notice: '全てのファイルが無事消去されました。' }
+            format.json { head :no_content }
+        end
+    end
+
     private
 
     def set_user

@@ -1,5 +1,8 @@
 <h1 class="heading">ユーザーリスト</h1>
+<p>
+<%= link_to '全て消去する', destroy_all_users_path, method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
 <%= link_to '新規登録', new_user_session_path, class: "btn add-user-btn" %>
+</p>
 
 <ul class="user-list">
   <% @users.each do |user| %>

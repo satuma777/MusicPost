@@ -18,8 +18,9 @@ Rails.application.routes.draw do
     root 'home#top'
     get '/alert' => 'home#alert'
 
-    delete '/sounds' => 'sounds#all_destroy', as: 'all_destroy'
+    delete '/sounds' => 'sounds#all_destroy', as: 'destroy_all_sounds'
     #↑collectionの中に入れてはいけない。入れると、パスの衝突があるのか、all_deleteがうまく作動しなくなる。
     #↑ディレクトリ操作などでうまくいかないときは、パスを確認する。
+    delete '/sounds' => 'users#all_destroy', as: 'destroy_all_users'
 
 end
