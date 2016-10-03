@@ -9,11 +9,16 @@ class ApplicationController < ActionController::Base
   private
   
   def configure_permitted_parameters
-     devise_parameter_sanitizer.permit(:sign_up){|u|
-      u.permit(:name)
-    }
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
     #↑deviseの新規登録フォームでnameを受け取れるようにしている
     #↑devise4.1.0以降で、devise_parameter_sanitizer.forからdevise_parameter_sanitizer.permitに変更された
-  end 
+  end
+
+  #def configure_permitted_parameters
+     #devise_parameter_sanitizer.permit(:sign_up){|u|
+      #u.permit(:name)
+    #}
+  #end 
+  #↑これもnameを追加するために使えると書いてある記事があったが、残念ながらこれを使うと常にバリデーションエラーとなる。
 
 end
