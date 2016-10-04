@@ -147,6 +147,10 @@ class SoundsController < ApplicationController
         end
         respond_to do |format|
             format.html { redirect_to sounds_url, notice: '全てのファイルが無事消去されました。' }
+            #↑ここではsounds_pathではなく、sounds_urlにしなくてはならない。
+            #↑_pathは相対パスなので、今いるurlにpathが追加されて、それに応じたページに飛ばされる。
+            #↑例えば、_pathを使うと、index（url：～/users）にいた場合、sounds_pathが追加され、url:～/users/usersに飛ばされる。
+            #↑つまり、routesを上から順番に見て、～/users/*に該当するページに飛ぶ。
             format.json { head :no_content }
         end
     end

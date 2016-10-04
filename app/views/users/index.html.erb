@@ -1,6 +1,9 @@
 <h1 class="heading">ユーザーリスト</h1>
 <p>
 <%= link_to '全て消去する', destroy_all_users_path, method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
+</p>
+
+<p>
 <%= link_to '新規登録', new_user_session_path, class: "btn add-user-btn" %>
 </p>
 
@@ -9,6 +12,7 @@
     <li>
       <%= link_to user.name, user %>
       <%= user.email %>
+      <%= link_to '消去する', user_path(user.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
     </li>
   <% end %>
 </ul>

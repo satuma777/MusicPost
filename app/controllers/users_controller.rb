@@ -1,10 +1,13 @@
 class UsersController < ApplicationController
-    before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-    before_action :set_user, only: [:show, :edit, :update]
+    before_action :authenticate_user!, only: [:edit, :update]
+    before_action :set_user, only: [:show, :edit, :update, :destroy]
     before_action :correct_user, only: [:edit, :update]
+    $count = 0
 
     def index
         @users = User.all
+        $count += $count
+        logger.debug($count)
     end
 
     def index_recommend
@@ -29,14 +32,21 @@ class UsersController < ApplicationController
         end
     end
 
+    def destroy
+        @user.destroy
+        respond_to do |format|
+            format.html { redirect_to users_url, notice: @user.name.to_s + 'は無事消去されました。' }
+            format.json { head :no_content }
+        end
+    end
+
     def all_destroy
         @users = User.all
         @users.each do |user|
             user.destroy
-            leave
         end
         respond_to do |format|
-            format.html { redirect_to users_path, notice: '全てのファイルが無事消去されました。' }
+            format.html { redirect_to users_url, notice: '全てのファイルが無事消去されました。' }
             format.json { head :no_content }
         end
     end

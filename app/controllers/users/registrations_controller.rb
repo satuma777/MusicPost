@@ -23,11 +23,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # DELETE /resource
-  #def destroy
-  #   super
-  # end
-   
   def destroy
+     super
+  end
+   
+  def all_destroy
     resource.all_destroy
     resource.leave
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)

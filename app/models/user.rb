@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
     #↑ deviseのvalidatableによって以下と同じバリデーションが設定されているのでコメントアウトする
     devise :validatable
 
+=begin 
     def leave
         #leave_atに退会時刻を追記
         update_attribute(:leave_at, Time.current)
@@ -30,4 +31,5 @@ class User < ActiveRecord::Base
           sp.update_attribute(:uid, new_uid)
         end
       end
+=end
 end
