@@ -38,19 +38,6 @@
     </header>
 
     <div class="container">
-        <% if flash[:notice].present? %>
-            <p class="alert alert-success">
-                <!-- ここでnoticeを表示してください -->
-                <%= notice %>
-            </p>
-        <% end %>
-        <% if flash[:alert].present? %>
-            <p class="alert alert-danger">
-              <!-- ここでalertを表示してください -->
-                <%= alert %>
-            </p>
-        <% end %>
-
         <%= yield %>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
