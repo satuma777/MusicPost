@@ -1,3 +1,15 @@
+<% if flash[:notice].present? %>
+            <p class="alert alert-success">
+                <!-- ここでnoticeを表示してください -->
+                <%= notice %>
+            </p>
+        <% end %>
+        <% if flash[:alert].present? %>
+            <p class="alert alert-danger">
+              <!-- ここでalertを表示してください -->
+                <%= alert %>
+            </p>
+<% end %>
 <h1>マイページ</h1>
 
 <aside class="sidebar">
@@ -11,7 +23,8 @@
     <h3 class="user-info"><%= @user.email %></h3>
   </section>
 
-  <% if current_user.id == @user.id %>
+  <% if current_user?(@user) %>
+  <!-- ↑current_user?ヘルパー（自作ヘルパー）を用いている -->
   <section>
     <small><%= link_to 'プロフィールを編集', edit_user_path(@user) %></small>
   </section>
@@ -20,8 +33,7 @@
 </aside>
 
 <ul class="sounds">
-  <!-- ここで@notesに対してeachメソッドを用いてください -->
-  <% @sounds.each do |sound|%>
+  <% @user.sounds.each do |sound|%>
     <li><%= link_to sound.title, sound %></li>
   <% end %>
 </ul>

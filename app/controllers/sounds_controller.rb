@@ -8,6 +8,7 @@ class SoundsController < ApplicationController
 
     before_action :authenticate_user!, only: [:new, :create, :show, :edit, :update, :destroy]
     before_action :set_sound, only: [:show, :edit, :update, :destroy]
+    before_action :correct_user, only: [:edit, :update]
 
     def index
         @sounds = Sound.all
@@ -38,7 +39,9 @@ class SoundsController < ApplicationController
     # POST /sounds.json
     def create
         @use_for = "new"
-        @sound = Sound.new(sound_params)
+        @sound = current_user.sounds.build(sound_params)
+        #↑buildを用いると、newして、@soundのuser_idにcurrent_userのidを代入することができる。
+        #↑current_userのidをhas_many側のモデル（ここではUser）のuser_idに代入しなくてはならない（そうしないと.userメソッドや.soundsメソッドは使えない）。
         @sound_value = Settings.NEW_SOUND_VALUE
         @thumb_value = Settings.NEW_THUMB_VALUE
         #↑ファイル選択画面での注釈。大文字のスネークケース文字には、定数が代入されている。
@@ -201,6 +204,14 @@ class SoundsController < ApplicationController
                     format.json { render json: @sound.errors, status: :unprocessable_entity }
                 end
             end
+        end
+
+        def correct_user
+            sound = Sound.find(params[:id])
+            if current_user.id != sound.user.id
+                redirect_to root_path, alert: '許可されていないページです'
+            end
+            #↑現在のユーザーとアクセスしようとしているページのユーザーIDが異なる場合はアクセスできないようにしている。
         end
 
 end

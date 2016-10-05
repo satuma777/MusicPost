@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
+  
+  include ApplicationHelper
+  #↑viewからはhelperを自由に呼び出せるが、コントローラーから呼び出す時は、includeしなくてはならない。
+  #↑すべてのコントローラはApplicationControllerを継承しているので、ApplicationControllerで定義したものはすべてのコントローラーに適用される。
+  
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
   #↑:devise_contoller?とはdeviseを生成した際にできるヘルパーメソッドの一つで、deviseにまつわる画面に行った時に、という意味がある。

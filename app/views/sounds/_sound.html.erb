@@ -10,10 +10,15 @@
 =end
 %>
 
-<tr>
-        <td><%= link_to  image_for(sound, Settings.INDEX_IMAGE_SIZE), sound_path(sound.id) %></td>
-        <td><%= link_to sound.title, sound_path(sound.id) %></td>
-        <td><%= sound.content %></td>
+<li>
+    <tr>
+            <td><%= link_to  image_for(sound, Settings.INDEX_IMAGE_SIZE), sound_path(sound.id) %></td>
+            <!--↑showにリンクしたサムネイル画像を表示-->
+            <td><%= link_to sound.title, sound_path(sound.id) %></td>
+            <!--↑showにリンクしたタイトル-->
+            <td><%= sound.content %></td>
+            <td><%= sound.user.name %></td>
+            <td><%= sound.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
 
 <%
 =begin
@@ -23,4 +28,5 @@
 =end
 %>
 
-</tr>
+    </tr>
+</li>

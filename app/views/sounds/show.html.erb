@@ -23,7 +23,8 @@
 <br>
 
 <div>
-<% if current_user.id == @sound.user.id %>
+<% if current_user?(@sound.user) %>
+<!-- ↑current_user?ヘルパー（自作ヘルパー）を用いている -->
     <section>
         <%= link_to '編集する', edit_sound_path(@sound.id) %>
         <%= link_to '消去する', sound_path(@sound.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>

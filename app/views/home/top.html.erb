@@ -1,4 +1,22 @@
 <h1>ホーム</h1>
+
+<%
+=begin
+%>
+<aside class="sidebar">
+    <%= render 'sounds/form' %>
+    <!-- ↑renderメソッドを用いて、notes/_form.html.erbを呼び出す -->
+</aside>
+<%
+=end
+%>
+<ul class="notes">
+    <h2>投稿の一覧</h2>
+    <%= render @sounds %>
+    <!-- ↑複数のインスタンスを持ったオブジェクトを渡すと、自動的にeachメソッドが実行され、soundが一つ一つ取り出される。 -->
+    <!-- ↑renderメソッドと@soundsを用いて、sounds/_sound.html.erbを呼び出す -->
+</ul>
+
 <h2>
     機能
 </h2>

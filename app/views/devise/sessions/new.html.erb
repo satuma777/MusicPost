@@ -1,14 +1,10 @@
 <% if flash[:notice].present? %>
-            <p class="alert alert-success">
-                <!-- ここでnoticeを表示してください -->
-                <%= notice %>
-            </p>
-        <% end %>
         <% if flash[:alert].present? %>
             <p class="alert alert-danger">
               <!-- ここでalertを表示してください -->
                 <%= alert %>
             </p>
+        <% end %>
 <% end %>
 <div class="panel panel-default devise-bs">
   <div class="panel-heading">
