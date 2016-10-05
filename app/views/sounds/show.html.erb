@@ -23,8 +23,12 @@
 <br>
 
 <div>
-<%= link_to '編集する', edit_sound_path(@sound.id) %>
-<%= link_to '消去する', sound_path(@sound.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
+<% if current_user.id == @sound.user.id %>
+    <section>
+        <%= link_to '編集する', edit_sound_path(@sound.id) %>
+        <%= link_to '消去する', sound_path(@sound.id), method: :delete, data: { confirm: '本当に消去してもいいですか？' } %>
+    </section>
+<% end %>
 <%= link_to '戻る', sounds_path %>
 </div>
 </th>

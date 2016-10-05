@@ -1,7 +1,9 @@
 #↓urlが同じになるものはVerbで区別され、それでも区別できないものは、上から順に実行される。
 Rails.application.routes.draw do
-    devise_for :users
-    resources :users do
+    devise_for :users, :controllers => {
+        :registrations => 'users/registrations'
+    }
+    resources :users, only:[:index, :show, :edit, :update, :destroy] do
         collection do
             get :index_recommend, as: 'recommend'
         end

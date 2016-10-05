@@ -6,6 +6,14 @@ class ApplicationController < ActionController::Base
   #↑:devise_contoller?とはdeviseを生成した際にできるヘルパーメソッドの一つで、deviseにまつわる画面に行った時に、という意味がある。
   #↑こうすることで全ての画面でconfigure_permitted_parametersをするのを防いでいるのである。
 
+    def after_sign_in_path_for(resource) 
+        user_url(resource)
+    end
+
+    def after_sign_out_path_for(resource)
+        root_path
+    end
+
   private
   
   def configure_permitted_parameters
