@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   #↑:devise_contoller?とはdeviseを生成した際にできるヘルパーメソッドの一つで、deviseにまつわる画面に行った時に、という意味がある。
   #↑こうすることで全ての画面でconfigure_permitted_parametersをするのを防いでいるのである。
+  after_action  :store_location
 
     def after_sign_in_path_for(resource) 
         user_url(resource)
@@ -33,5 +34,21 @@ class ApplicationController < ActionController::Base
     #}
   #end 
   #↑これもnameを追加するために使えると書いてある記事があったが、残念ながらこれを使うと常にバリデーションエラーとなる。
+  
+  def store_location
+  #↓直前のURLを保存しておく。
+    if (request.fullpath != "/users/sign_in" &&
+        request.fullpath != "/users/sign_up" &&
+        request.fullpath !~ Regexp.new("\\A/users/password.*\\z") &&
+        !request.xhr?) # don't store ajax calls
+      session[:previous_url] = request.fullpath
+       #↑.fullpathとすると、requestオブジェクトに入っているurlを取ることができる。
+    end
+  end
+
+  def after_sign_in_path_for(resource)
+  #↓ログイン後は保存しておいたURLに飛ぶようにする。
+    session[:previous_url] || root_path
+  end
 
 end
