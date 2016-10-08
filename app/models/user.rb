@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
     has_many :sounds
     #↑複数形で書く。
+    has_many :likes
+    
     devise :database_authenticatable, :registerable,
             :recoverable, :rememberable, :trackable
 

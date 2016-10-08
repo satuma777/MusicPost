@@ -6,12 +6,13 @@ class Sound < ActiveRecord::Base
 
     belongs_to :user
     #↑単数形で書く。
+    has_many :likes
 
     validate :upfile_check
     validate :image_check
 
     validates :title, presence: true
-    validates :content, presence: true
+    validates :content, presence: true, length: { maximum: 200 }
 
     #validates :user_id, presence: true
 
