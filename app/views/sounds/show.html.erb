@@ -27,7 +27,12 @@
     <%= link_to 'いいね！', like_path(@sound.id), method: :post %>
 <% end %>
 
-<br>
+<div>
+  <small>
+    <!-- 投稿がいいね！されている数を表示してください -->
+    <%= @sound.likes.count %>人がいいね！といっています
+  </small>
+</div>
 
 <div>
 <% if current_user?(@sound.user) %>

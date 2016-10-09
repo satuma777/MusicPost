@@ -12,12 +12,24 @@
 
 <li>
     <tr>
-            <td><%= link_to  image_for(sound, Settings.INDEX_IMAGE_SIZE), sound_path(sound.id) %></td>
+            <td><%= link_to image_for(sound, Settings.INDEX_IMAGE_SIZE), sound_path(sound.id) %></td>
             <!--↑showにリンクしたサムネイル画像を表示-->
-            <td><%= link_to sound.title, sound_path(sound.id) %></td>
-            <!--↑showにリンクしたタイトル-->
-            <td><%= sound.content %></td>
-            <td><%= sound.user.name %></td>
+            
+            <span class="content">
+                <td><%= link_to sound.title, sound_path(sound.id) %></td>
+                <!--↑showにリンクしたタイトル-->
+                <td><%= sound.content %></td>
+                <div>
+                  <small>
+                    <%= note.likes.count %>人がいいね！といっています
+                  </small>
+                </div>
+            </span>
+
+            <span class="user-name">
+                <td><%= sound.user.name %></td>
+            </span>
+
             <td><%= sound.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
 
 <%

@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
     has_many :sounds
     #↑複数形で書く。
     has_many :likes
+
+    #↓user.like_notesによってユーザーがいいね！した音楽の一覧を取得したいので、has_manyを定義する。
+    #↓userがたくさんもっているlike（likesテーブル）を経由して（through）、それぞれのlikeに紐付いたnoteをとりにいく（source）
+    has_many :like_sounds, through: :likes, source: :sound
     
     devise :database_authenticatable, :registerable,
             :recoverable, :rememberable, :trackable

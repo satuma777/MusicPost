@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
     before_action :authenticate_user!, only: [:show, :edit, :update]
-    before_action :set_user, only: [:show, :edit, :update, :destroy]
+    before_action :set_user, only: [:show, :edit, :update, :destroy, :likes_sounds]
     before_action :correct_user, only: [:edit, :update]
     $count = 0
 
@@ -13,8 +13,10 @@ class UsersController < ApplicationController
     def index_recommend
     end
 
+    #↓ユーザーの投稿一覧を表示
     def show
         @sounds = @user.sounds
+        @title = "投稿一覧"
     end
 
     def edit
@@ -46,9 +48,22 @@ class UsersController < ApplicationController
             user.destroy
         end
         respond_to do |format|
-            format.html { redirect_to users_url, notice: '全てのファイルが無事消去されました。' }
+            format.html { redirect_to users_url, notice: '全てのユーザーが無事消去されました。' }
             format.json { head :no_content }
         end
+    end
+
+    #↓ユーザーがいいね！した音楽の一覧を表示。
+    #↓モデルで定義したlike_soundsとはまた別のもの。
+    #↓モデルで定義したlike_soundsはユーザーがいいね！をした音楽をすべて取ってくるメソッド。
+    #↓下のコントローラーでは取ってきた音楽を利用してビューに反映させている。
+    def like_sounds
+        @sounds = @user.like_sounds
+        @title = "いいね！一覧"
+        #↓showで表示するもの（ユーザーが投稿した音楽）と
+        #↓like_sounds（ユーザーがいいね！した音楽の一覧を表示）で表示するもの
+        #↓はほとんど同じなので、一部だけ変更して同じビューを表示する。
+        render :show
     end
 
     private
@@ -68,4 +83,5 @@ class UsersController < ApplicationController
         end
         #↑現在のユーザーとアクセスしようとしているページのユーザーIDが異なる場合はアクセスできないようにしている。
     end
+
 end

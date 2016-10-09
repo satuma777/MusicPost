@@ -23,6 +23,9 @@
     <h3 class="user-info"><%= @user.email %></h3>
   </section>
 
+  <!-- ↓countメソッドを用いて、ユーザーのいいね！している数を表示する-->
+  <%= link_to @user.likes.count, like_sounds_user_path(@user.id) %>個の投稿にいいね!しています
+
   <% if current_user?(@user) %>
   <!-- ↑current_user?ヘルパー（自作ヘルパー）を用いている -->
   <section>
@@ -33,10 +36,28 @@
 </aside>
 
 <ul class="sounds">
+  <h2><%= @title %></h2>
+<%
+=begin
+%>
+    ↓<% @user.sounds.each do |sound|%>
+        <%= render sound%>
+    <% end %>
+    と同じ意味
+<%
+=end
+%>
+    <%= render @sounds %>
+<%
+=begin
+%>
   <% @user.sounds.each do |sound|%>
     <li><%= link_to sound.title, sound %></li>
   <% end %>
 </ul>
+<%
+=end
+%>
 
 <h2>
     機能
